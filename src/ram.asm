@@ -277,6 +277,9 @@ EnemySpeedModifier:
 byte_BA:
 	.dsb 1	                     ; $00ba
 	.dsb 1                      ; $00bb
+IFDEF REV_US
+RoomStatusFlags:
+ENDIF
 	.dsb 1                      ; $00bc
 	.dsb 1                      ; $00bd
 	.dsb 1                      ; $00be
@@ -1180,7 +1183,9 @@ MaybeSphinxFlags:
 	.dsb 1 ; $1D                ; $03bb
 	.dsb 1 ; $1E                ; $03bc
 	.dsb 1 ; $1F                ; $03bd
+IFNDEF REV_US
 RoomStatusFlags:
+ENDIF
 	.dsb 1	                     ; $03be
 CurrentRoomID:
 	.dsb 1                      ; $03bf

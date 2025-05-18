@@ -56,7 +56,7 @@ loc_8041:
 	DEY
 	BNE loc_8041
 	DEX
-	STX a:byte_1
+	STXc byte_1
 	BPL loc_8041
 	LDA #6
 	STA PPUMASK
@@ -82,15 +82,15 @@ CopyProtectBank:
 
 	; public NMI
 NMI:
-	STA a:NMITemp_A			; save A
-	LDA a:PPUCtrlMirror		; Disable NMI
+	STAc NMITemp_A			; save A
+	LDAc PPUCtrlMirror		; Disable NMI
 	AND #$7F
 	JSR SetPPUCtrl
-	LDA a:PPUMaskMirror
+	LDAc PPUMaskMirror
 	ORA #$18
 	JSR SetPPUMask
-	STY a:NMITemp_Y			; save Y
-	STX a:NMITemp_X			; save X
+	STYc NMITemp_Y			; save Y
+	STXc NMITemp_X			; save X
 	LDA #0				; _ Sprite DMA setup...
 	STA OAMADDR			;  |
 	LDA #2				;  |
@@ -105,43 +105,62 @@ NMI:
 	JSR HandleSound
 	LDA Joypad1_Immediate
 	STA a:Joypad1_ImmediateCopy
-	LDX a:NMITemp_X			; load X
-	LDY a:NMITemp_Y			; load Y
+	LDXc NMITemp_X			; load X
+	LDYc NMITemp_Y			; load Y
 	LDA PPUSTATUS
-	LDA a:PPUCtrlMirror		; Re-enable NMI
+	LDAc PPUCtrlMirror		; Re-enable NMI
 	ORA #$80
 	JSR SetPPUCtrl
-	LDA a:NMITemp_A			; load A
+	LDAc NMITemp_A			; load A
 	RTI
 ; End of function NMI
 
 ; =============== S U B	R O U T	I N E =======================================
 
 HandlePPUUpdates:
-	LDA a:PPUUpdateFlag1
+	LDAc PPUUpdateFlag1
 	BEQ loc_80D5
-	LDA a:UpdatePaletteFlag
+	LDAc UpdatePaletteFlag
+IFDEF REV_US
+	ORA a:PPUUpdateFlag2
+ENDIF
 	BEQ loc_80D5
+IFDEF REV_US
+	LDA UpdatePaletteFlag
+	BEQ loc_80D5
+ENDIF
+
 	JSR CopyPaletteToPPU
+IFNDEF REV_US
 	RTS
-; ---------------------------------------------------------------------------
 
 loc_80D5:
 	LDA a:PPUUpdateFlag2
 	BEQ loc_80E0
 	JSR sub_9729
 	JMP loc_815B
+ELSE
+loc_80D5:
+	LDA a:PPUUpdateFlag2
+	BEQ locret_US_80EX
+	JSR sub_9729
+	JMP loc_815B
+ENDIF
 ; ---------------------------------------------------------------------------
+IFDEF REV_US
+locret_US_80EX:
+	RTS
+ENDIF
 
 loc_80E0:
-	LDA a:PPUUpdateFlag1
+	LDAc PPUUpdateFlag1
 	ASL A
 	TAX
 	LDA off_81AB,X
-	STA a:byte_0
+	STAc byte_0
 	LDA off_81AB+1,X
-	STA a:byte_1
-	LDA a:PPUUpdateFlag1
+	STAc byte_1
+	LDAc PPUUpdateFlag1
 	BEQ loc_8129
 	LDA #0
 	STA byte_3EE
@@ -163,14 +182,14 @@ loc_8113:
 	STA byte_3EF
 	TYA
 	JSR LoadPointerTo050		; attribute table buffer or ram5A3
-	LDA a:word_50
-	STA a:byte_0
-	LDA a:word_50+1
-	STA a:byte_1
+	LDAc word_50
+	STAc byte_0
+	LDAc word_50+1
+	STAc byte_1
 
 loc_8129:
 	LDY #0
-	LDA a:PPUCtrlMirror
+	LDAc PPUCtrlMirror
 	AND #$FB
 	ORA byte_3EE
 	JSR SetPPUCtrl
@@ -196,7 +215,7 @@ loc_8156:
 	STA byte_3F1
 
 loc_815B:
-	LDA a:PPUCtrlMirror
+	LDAc PPUCtrlMirror
 	AND #$FA
 	JSR SetPPUCtrl
 	LDA PPUSTATUS
@@ -239,6 +258,9 @@ loc_8190:
 	INX
 	DEY
 	BNE loc_8190
+IFDEF REV_US
+	LDA PPUSTATUS
+ENDIF
 	LDA #$3F
 	STA PPUADDR
 	LDA #0
@@ -256,7 +278,7 @@ off_81AB:
 ; =============== S U B	R O U T	I N E =======================================
 
 MainLogicHandler:
-	LDA a:InGameFlag
+	LDAc InGameFlag
 	JSR JumpTable
 ; ---------------------------------------------------------------------------
 	.WORD TitleScreenHandler
@@ -266,7 +288,7 @@ MainLogicHandler:
 ; =============== S U B	R O U T	I N E =======================================
 
 GameHandler:
-	LDA a:GameState			; - Main jump table -
+	LDAc GameState			; - Main jump table -
 	JSR JumpTable
 ; ---------------------------------------------------------------------------
 	.WORD GameState_0_Init		; 0: game init
@@ -348,7 +370,7 @@ GameState_3_DrawScreen:
 	JSR ClearAllSprites
 	LDA #0
 	STA InitFlag_LoadedDifficulty
-	STA RoomStatusFlags
+	STA a:RoomStatusFlags
 	STA a:byte_F7
 	STA a:EnemyCoinTimer
 	STA a:EnemyCoinTimer+1
@@ -360,7 +382,7 @@ GameState_3_DrawScreen:
 	CMP #$A0
 	BCS loc_8281			;   jump ahead
 	LDX #RF_BombRoom
-	STX RoomStatusFlags
+	STX a:RoomStatusFlags
 	LDX #0
 	STX PlayerMightyLevelPressesLeft
 	STX PlayerMightyLevel
@@ -404,7 +426,7 @@ loc_82AB:
 	JSR SpawnBrotherRoomObjects
 
 loc_82BE:
-	INC a:GameState			; 3 -> 4
+	INCc GameState			; 3 -> 4
 	RTS
 ; End of function GameState_3_DrawScreen
 
@@ -484,7 +506,7 @@ loc_8341:
 	JSR AnimateDoorClose
 
 loc_8352:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_SingleScreen
 	BEQ loc_835C
 
@@ -495,12 +517,12 @@ loc_8359:
 loc_835C:
 	LDX EntryDoorType
 	LDY #$48
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_ScrollStop
 	BEQ loc_8384
 	CPX #8
 	BCS loc_8359
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_Horizontal|RF_SectionStart
 	BEQ loc_837D
 	PHP
@@ -522,7 +544,7 @@ loc_837D:
 loc_8384:
 	CPX #8
 	BCC loc_83E6
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_Horizontal|RF_SectionStart
 	BEQ loc_8399
 	PHP
@@ -548,9 +570,9 @@ loc_839E:
 	LDA byte_340
 	ORA #4
 	STA byte_340
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #11110111b
-	STA RoomStatusFlags		; clear	bit 3 (#$08)
+	STA a:RoomStatusFlags		; clear	bit 3 (#$08)
 
 loc_83B8:
 	LDA byte_343
@@ -580,7 +602,7 @@ loc_83E6:
 	STX CollisionFlag		; = 0
 	INX
 	STX PlayerStruct
-	INC a:GameState			; 4 -> 5
+	INCc GameState			; 4 -> 5
 	LDA a:MaybePauseFlag
 	ORA #$40
 	STA a:MaybePauseFlag
@@ -697,14 +719,14 @@ loc_84A5:
 	LDA #$AC
 	STA CurrentRoomID		; -> torture room
 	LDA #2
-	STA a:GameState			; 7 / ?	-> 2
+	STAc GameState			; 7 / ?	-> 2
 	LDA #$49
 	STA GreedyJumpsRemaining
 	RTS
 ; ---------------------------------------------------------------------------
 
 loc_84C2:
-	LDA a:JustJumpedFlag
+	LDAc JustJumpedFlag
 	BEQ loc_84F2
 	LDA GreedyJumpsRemaining	; POI: They have BCDSub1FromA,
 	SEC					; so I'm not sure why they
@@ -756,9 +778,9 @@ loc_8505:
 ; ---------------------------------------------------------------------------
 
 RoundClear_0:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #$FD
-	STA RoomStatusFlags		; clear	#RF_BombRoom
+	STA a:RoomStatusFlags		; clear	#RF_BombRoom
 	LDA a:StageTimer
 	ORA #$40
 	STA a:TimerStatusMaybe
@@ -784,9 +806,9 @@ RoundClear_0:
 	LDX #2				; round	"X" sprite drawing
 	JSR InitXSprites		; sets up (X) sprites with #00 idx/attrib
 	LDA #$84
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	LDA #$44
-	STA a:TempSpriteY
+	STAc TempSpriteY
 	LDA LastBombRoomCleared		; Get the last bomb room clear
 	AND #$F				; 9x ->	0x
 	CLC
@@ -812,16 +834,16 @@ loc_8571:
 	LDA #Strings_SpecialBonus
 	JSR WriteStringToPPU		; special bonus
 	LDA #$B8
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	LDA #$C0
-	STA a:TempSpriteY
+	STAc TempSpriteY
 	LDX #3
 	JSR InitXSprites		; sets up (X) sprites with #00 idx/attrib
 	LDA #$54
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	LDA #$AC
-	STA a:TempSpriteY
-	LDA a:FireBombsCollected
+	STAc TempSpriteY
+	LDAc FireBombsCollected
 	CLC
 	ADC #$C
 	JSR WriteBCDDigitsSprites
@@ -935,8 +957,8 @@ RoundClear_3:
 
 loc_8662:
 	LDA #2
-	STA a:GameState			; -> 2
-	DEC a:FireBombsCollected
+	STAc GameState			; -> 2
+	DECc FireBombsCollected
 	BNE loc_8687
 	LDX LastBombRoomCleared		; used in gdv and difficulty sel
 	CPX #$9F
@@ -962,6 +984,9 @@ loc_8687:
 	STA ScoreMultiplier		; reset
 	STA DoorCheckFlag_1E_DeathCount	; reset
 	STA DoorCheckFlag_1E_Unk	; reset
+IFDEF REV_US
+	JSR QueueSound
+ENDIF
 	RTS
 ; End of function GameState_8_RoundClear
 
@@ -969,12 +994,12 @@ loc_8687:
 
 DrawTimeBonus:
 	LDA #5
-	STA a:CurrentSpriteIndex
+	STAc CurrentSpriteIndex
 	LDA #$7C
-	STA a:TempSpriteY
+	STAc TempSpriteY
 	LDA #$AC
-	STA a:TempSpriteX
-	LDA a:StageTimerCopy
+	STAc TempSpriteX
+	LDAc StageTimerCopy
 	JSR WriteBCDDigitsSprites
 	RTS
 ; End of function DrawTimeBonus
@@ -983,11 +1008,11 @@ DrawTimeBonus:
 
 DrawFireBombBonus:
 	LDA #$C
-	STA a:CurrentSpriteIndex
+	STAc CurrentSpriteIndex
 	LDA #$C4
-	STA a:TempSpriteY
+	STAc TempSpriteY
 	LDA #$B4
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	LDA FireBombBonusPoints
 	JSR WriteBCDDigitsSprites
 	RTS
@@ -1047,7 +1072,7 @@ _GameOverAfterInit:
 	BNE locret_8732
 	LDA #0
 	STA GameOverInitFlag
-	STA a:InGameFlag
+	STAc InGameFlag
 	JSR RestoreDefaultPalettes
 
 locret_8732:
@@ -1086,7 +1111,7 @@ loc_874C:
 GameState_B_AnimateDoorOpen:
 	JSR AnimateDoorOpen
 	LDA #5
-	STA a:GameState			; B -> 5
+	STAc GameState			; B -> 5
 	RTS
 ; End of function GameState_B_AnimateDoorOpen
 
@@ -1108,7 +1133,7 @@ LoseALifeMaybeGameOver:
 	LDA #1				; Not the game over state
 
 _NoLivesLeft:
-	STA a:GameState			; (6 or	?) -> A	or 1
+	STAc GameState			; (6 or	?) -> A	or 1
 	LDA #0
 	STA a:TimerStatusMaybe
 	RTS
@@ -1122,7 +1147,7 @@ MaybeGoBackToOldRoom:
 	LDA EntryDoorTypeBackup
 	STA EntryDoorType
 	LDA #2
-	STA a:GameState			; -> 2
+	STAc GameState			; -> 2
 	RTS
 ; End of function MaybeGoBackToOldRoom
 
@@ -1185,7 +1210,7 @@ loc_87D3:
 	BNE loc_87E8
 	STA a:TimerStatusMaybe
 	LDA #6				; Time over
-	STA a:GameState			; -> 6
+	STAc GameState			; -> 6
 	LDA a:TimerStatusMaybe
 	ORA #$40
 	STA a:TimerStatusMaybe		; OR with #$40 - freezes timer
@@ -1200,13 +1225,13 @@ loc_87E8:
 ; sets up (X) sprites with #00 idx/attrib
 
 InitXSprites:
-	LDA a:CurrentSpriteIndex
+	LDAc CurrentSpriteIndex
 	ASL A
 	ASL A
 	TAY
 
 loc_87F2:
-	LDA a:TempSpriteY
+	LDAc TempSpriteY
 	STA SpriteDMAArea,Y		; Y pos
 	INY
 	LDA #0
@@ -1215,13 +1240,13 @@ loc_87F2:
 	LDA #0
 	STA SpriteDMAArea,Y		; Attributes
 	INY
-	LDA a:TempSpriteX
+	LDAc TempSpriteX
 	STA SpriteDMAArea,Y		; X pos
 	INY
 	CLC
 	ADC #8
-	STA a:TempSpriteX			; shift	right 8	pixels
-	INC a:CurrentSpriteIndex
+	STAc TempSpriteX			; shift	right 8	pixels
+	INCc CurrentSpriteIndex
 	DEX
 	BNE loc_87F2
 	RTS
@@ -1361,7 +1386,7 @@ loc_88EB:
 _MightyLevelAPressCheck:
 	LDX #JP_A			; Check	for A presses
 	LDA #RF_BombRoom
-	BIT RoomStatusFlags		; #$2 =	royal (bomb) room?
+	BIT a:RoomStatusFlags		; #$2 =	royal (bomb) room?
 	BEQ loc_8901			; If so, skip ahead
 	LDX #JP_B|JP_A			; Otherwise, check B too
 
@@ -1390,7 +1415,7 @@ _NoMightyLevelDown:
 	ORA PlayerStruct
 	STA PlayerStruct
 	LDA #Sound_Jump
-	STA a:JustJumpedFlag
+	STAc JustJumpedFlag
 	JSR QueueSound			; jump
 	CLC
 	LDA TortureRoomSceneFlag	; Are you in the torture room?
@@ -1416,7 +1441,7 @@ loc_895A:
 	AND a:Joypad1_ImmediateCopy
 	BNE loc_8970
 	LDA #RF_BombRoom
-	BIT RoomStatusFlags		; #$02 = royal (bomb) room
+	BIT a:RoomStatusFlags		; #$02 = royal (bomb) room
 	BNE loc_8970
 	JSR UseMightyCoin
 
@@ -1450,16 +1475,16 @@ loc_899A:
 
 loc_899D:
 	LDA #RF_SingleScreen|RF_ScrollStop
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BNE loc_89AB
 	LDA #RF_AtScrollEdge
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BEQ loc_89D6
 
 loc_89AB:
 	JSR ApplyPlayerYVelocity
 	LDA #RF_SingleScreen
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BNE loc_89D6
 	LDA PlayerYPosHi
 	CMP #$79
@@ -1474,11 +1499,11 @@ loc_89C4:
 	PLP
 	BCC loc_89D6
 	LDA #RF_ScrollStop
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BNE loc_89D6
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #$F7
-	STA RoomStatusFlags		; clear	#RF_AtScrollEdge
+	STA a:RoomStatusFlags		; clear	#RF_AtScrollEdge
 
 loc_89D6:
 	LDA PlayerYPosHi
@@ -1532,22 +1557,22 @@ loc_8A10:
 	ROL A
 	STA byte_3DD
 	LDA #RF_ScrollStop
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BEQ loc_8A3E
 	LSR A
-	BIT RoomStatusFlags		; #RF_SingleScreen
+	BIT a:RoomStatusFlags		; #RF_SingleScreen
 	BNE loc_8A3E
 	LDA #RF_AtScrollEdge
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BEQ loc_8A66
 
 loc_8A3E:
 	JSR ApplyPlayerXVelocity
 	LDA #RF_ScrollStop
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BEQ loc_8A66
 	LSR A
-	BIT RoomStatusFlags		; #RF_SingleScreen
+	BIT a:RoomStatusFlags		; #RF_SingleScreen
 	BNE loc_8A66
 	LDA PlayerXPosHi
 	CMP #$80
@@ -1561,9 +1586,9 @@ loc_8A3E:
 loc_8A5B:
 	PLP
 	BCC loc_8A66
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #~RF_AtScrollEdge
-	STA RoomStatusFlags		; clear	#RF_AtScrollEdge
+	STA a:RoomStatusFlags		; clear	#RF_AtScrollEdge
 
 loc_8A66:
 	LDX #0
@@ -1587,12 +1612,12 @@ loc_8A78:
 	PLP
 	BNE loc_8A99
 	INC byte_3DF
-	STA a:byte_0
+	STAc byte_0
 	LDA byte_3DF
 	LSR A
 	LSR A
 	LSR A
-	LDA a:byte_0
+	LDAc byte_0
 	ADC #0
 
 loc_8A99:
@@ -1603,16 +1628,16 @@ loc_8A99:
 
 DrawPlayer:
 	LDA PlayerSprite
-	STA a:TempSpriteTile
+	STAc TempSpriteTile
 	LDA byte_3DD
 	ORA #1
-	STA a:TempSpriteAttributesish
+	STAc TempSpriteAttributesish
 	LDA #0
-	STA a:CurrentSpriteIndex
+	STAc CurrentSpriteIndex
 	LDA PlayerXPosHi
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	LDA PlayerYPosHi
-	STA a:TempSpriteY
+	STAc TempSpriteY
 	JSR WriteSprite
 	RTS
 ; End of function DrawPlayer
@@ -1752,7 +1777,7 @@ DrawScoreAndCoinCount:
 
 loc_8B70:
 	LDA #$10
-	STA a:TempSpriteAttributesish
+	STAc TempSpriteAttributesish
 	JSR DrawScore			; draw score sprites?
 	JSR DrawMightyCoinCountOrMultiplier ; maybe draw mighty	coin count
 	RTS
@@ -1768,12 +1793,12 @@ DrawScore:
 	SpriteData 0, $10,	$58, $10, $38 ;
 ; ---------------------------------------------------------------------------
 	LDX #3
-	STX a:byte_0
+	STXc byte_0
 	LDA #0
-	STA a:byte_1
+	STAc byte_1
 
 loc_8B8E:
-	LDX a:byte_0
+	LDXc byte_0
 	LDA a:PlayerScore,X
 	LSR A
 	LSR A
@@ -1783,7 +1808,7 @@ loc_8B8E:
 	LDA a:PlayerScore,X
 	AND #$F
 	JSR DrawScoreDigitMaybe
-	DEC a:byte_0
+	DECc byte_0
 	BPL loc_8B8E
 	RTS
 ; End of function DrawScore
@@ -1794,13 +1819,13 @@ loc_8B8E:
 
 DrawScoreDigitMaybe:
 	PHP
-	LDY a:TempSpriteY
+	LDYc TempSpriteY
 	PLP
 	PHA
 	BNE loc_8BBD
 	TXA
 	BEQ loc_8BBD
-	LDA a:byte_1
+	LDAc byte_1
 	BNE loc_8BC0
 	LDY #$F8
 	BNE loc_8BC0
@@ -1810,7 +1835,7 @@ loc_8BBD:
 
 loc_8BC0:
 	TYA
-	LDY a:CurrentSpriteIndex
+	LDYc CurrentSpriteIndex
 	STA SpriteDMAArea,Y
 	INY
 	PLA
@@ -1819,14 +1844,14 @@ loc_8BC0:
 	LDA #0
 	STA SpriteDMAArea,Y
 	INY
-	LDA a:TempSpriteX
+	LDAc TempSpriteX
 	STA SpriteDMAArea,Y
 	INY
-	STY a:CurrentSpriteIndex
-	LDA a:TempSpriteX
+	STYc CurrentSpriteIndex
+	LDAc TempSpriteX
 	CLC
 	ADC #8
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	RTS
 ; End of function DrawScoreDigitMaybe
 
@@ -1842,21 +1867,21 @@ DrawTimerOrTortureJumps:
 	LDA TortureRoomSceneFlag	; If not in torture room...
 	BEQ loc_8BF9			;   skip ahead
 	LDA #$F				; Otherwise, sprite tile = blank
-	STA a:TempSpriteTile		; (otherwise it	is the "T")
+	STAc TempSpriteTile		; (otherwise it	is the "T")
 
 loc_8BF9:
 	JSR WriteSprite
-	LDA a:TempSpriteX
+	LDAc TempSpriteX
 	CLC
 	ADC #$10
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	LDA a:StageTimer
 	LDX TortureRoomSceneFlag	; If not in the	torture	room...
 	BEQ loc_8C1A			;   skip ahead
 	LDA #$44
-	STA a:TempSpriteY			; to be	center of screen-ish
+	STAc TempSpriteY			; to be	center of screen-ish
 	LDA #$84
-	STA a:TempSpriteX			; remaining before release
+	STAc TempSpriteX			; remaining before release
 	LDA GreedyJumpsRemaining
 
 loc_8C1A:
@@ -1873,29 +1898,29 @@ DrawMightyCoinCountOrMultiplier:
 ; ---------------------------------------------------------------------------
 	SpriteData $B, $10, $BC, $1C, $C ;
 ; ---------------------------------------------------------------------------
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_BombRoom		; Check	for royal palace/bomb room
 	BEQ loc_8C30
-	INC a:TempSpriteTile		; If so, tile M	-> x
+	INCc TempSpriteTile		; If so, tile M	-> x
 
 loc_8C30:
 	JSR WriteSprite
-	LDA a:TempSpriteX
+	LDAc TempSpriteX
 	CLC
 	ADC #8
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	LDX #0
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_BombRoom		; Check	for royal palace / bomb	room
 	BEQ loc_8C46
 	INX
 
 loc_8C46:
 	LDA PlayerMightyCoins,X		; (...or score multiplier)
-	STA a:TempSpriteTile
+	STAc TempSpriteTile
 	TXA
 	BEQ loc_8C52
-	INC a:TempSpriteTile
+	INCc TempSpriteTile
 
 loc_8C52:
 	JSR WriteSprite
@@ -1906,12 +1931,8 @@ loc_8C52:
 
 RestoreDefaultPalettes:
 	LDX #0
-; End of function RestoreDefaultPalettes
-
-; =============== S U B	R O U T	I N E =======================================
 
 ; X = where to start (0~1F)
-
 RestoreDefaultPalettesLimited:
 	LDA MainPalette,X
 	STA PaletteBuffer,X
@@ -1920,14 +1941,14 @@ RestoreDefaultPalettesLimited:
 	BNE RestoreDefaultPalettesLimited ; X =	where to start (0~1F)
 	LDA #1
 	STA a:UpdatePaletteFlag
-	STA a:PPUUpdateFlag1
+	STAc PPUUpdateFlag1     ; these zero page changes are killing me
 	RTS
 ; End of function RestoreDefaultPalettesLimited
 
 ; =============== S U B	R O U T	I N E =======================================
 
 SetPPUCtrl:
-	STA a:PPUCtrlMirror
+	STAc PPUCtrlMirror
 	STA PPUCTRL
 	RTS
 ; End of function SetPPUCtrl
@@ -1935,7 +1956,7 @@ SetPPUCtrl:
 ; =============== S U B	R O U T	I N E =======================================
 
 SetPPUMask:
-	STA a:PPUMaskMirror
+	STAc PPUMaskMirror
 	STA PPUMASK
 	RTS
 ; End of function SetPPUMask
@@ -1959,7 +1980,7 @@ loc_8C85:
 	DEX
 	BPL loc_8C85
 	LDA PPUSTATUS
-	LDA a:PPUCtrlMirror
+	LDAc PPUCtrlMirror
 	ORA #$10
 	AND #$F0
 	JSR SetPPUCtrl
@@ -2054,7 +2075,7 @@ loc_8D0E:
 	JSR SetPPUScroll
 	STA byte_3C2
 	STA byte_3C4
-	LDA a:PPUCtrlMirror
+	LDAc PPUCtrlMirror
 	AND #$FD
 	JSR SetPPUCtrl
 	RTS
@@ -2103,9 +2124,9 @@ loc_8D3D:
 WriteBCDDigitsSprites:
 	PHA
 	AND #$F
-	STA a:TempSpriteTile
+	STAc TempSpriteTile
 	LDA #$10
-	STA a:TempSpriteAttributesish
+	STAc TempSpriteAttributesish
 	JSR WriteSprite
 	PLA
 	AND #$F0
@@ -2117,11 +2138,11 @@ loc_8D54:
 	LSR A
 	LSR A
 	LSR A
-	STA a:TempSpriteTile
-	LDA a:TempSpriteX
+	STAc TempSpriteTile
+	LDAc TempSpriteX
 	SEC
 	SBC #8
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	JSR WriteSprite
 	RTS
 ; End of function WriteBCDDigitsSprites
@@ -2183,22 +2204,22 @@ CalculateModulus:
 	TXA
 	PHA					; Store	X
 	LDA #0
-	STA a:Mod_Remainder
+	STAc Mod_Remainder
 	LDX #$10
-	ROL a:Mod_Number
-	ROL a:Mod_Number+1
+	ROLc Mod_Number
+	ROLc Mod_Number+1
 
 loc_8DA9:
-	ROL a:Mod_Remainder
-	LDA a:Mod_Remainder
-	CMP a:Mod_Modulus
+	ROLc Mod_Remainder
+	LDAc Mod_Remainder
+	CMPc Mod_Modulus
 	BCC loc_8DBA
-	SBC a:Mod_Modulus
-	STA a:Mod_Remainder
+	SBCc Mod_Modulus
+	STAc Mod_Remainder
 
 loc_8DBA:
-	ROL a:Mod_Number
-	ROL a:Mod_Number+1
+	ROLc Mod_Number
+	ROLc Mod_Number+1
 	DEX
 	BNE loc_8DA9
 	PLA					; Load X
@@ -2299,7 +2320,7 @@ loc_8E41:
 	LDA (byte_4C),Y
 	EOR byte_4E
 	STA byte_4E
-	LDA a:TempSpriteAttributesish
+	LDAc TempSpriteAttributesish
 	AND #$23
 	ASL A
 	ASL A
@@ -2413,18 +2434,18 @@ AddScore:
 	LDX ScoreMultiplier		; If score mult	= x1,
 	BEQ _AddScoreIndex		; skip all this
 	TAY					; store	score index in Y
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_BombRoom		; check	if royal palace	/ bomb room
 	PHP					; Push result flags
 	TYA					; restore score	index
 	PLP					; restore result flags
 	BEQ _AddScoreIndex		; if not a bomb	room, do normal	score
 	DEX					; otherwise, mult - 1
-	STX a:byte_10			; store	mult
+	STXc byte_10			; store	mult
 	ASL A				; score	index x2
 	ASL A				; score	index x4
 	CLC
-	ADC a:byte_10			; add mult
+	ADCc byte_10			; add mult
 	TAX
 	LDA MultipliedScoreTable,X	; load mult'd score
 
@@ -2489,7 +2510,7 @@ loc_8F6D:
 	STA byte_364
 
 loc_8F7A:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_BombRoom
 	BEQ locret_8FB0
 	LDA #2
@@ -2532,7 +2553,7 @@ sub_8FB1:
 	STX byte_30D
 	LDY ScoreMultiplier
 	BEQ loc_8FD3
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_BombRoom
 	BEQ loc_8FD3
 	DEY
@@ -2588,14 +2609,14 @@ loc_9009:
 	TAX
 
 loc_9011:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #~(RF_SingleScreen|RF_ScrollStop) ; clear #RF_SingleScreen #RF_ScrollStop
 
 loc_9016:
-	STA RoomStatusFlags
+	STA a:RoomStatusFlags
 	TXA
-	ORA RoomStatusFlags
-	STA RoomStatusFlags		; Sets based on	room header?
+	ORA a:RoomStatusFlags
+	STA a:RoomStatusFlags		; Sets based on	room header?
 	RTS
 ; End of function MaybeLoadRoomFlags
 
@@ -2608,15 +2629,15 @@ LoadRoomStuff:
 	PLA
 	ASL A
 	BCC loc_902E
-	INC a:word_50+1
+	INCc word_50+1
 
 loc_902E:
 	CLC
-	ADC a:word_50
-	STA a:off_2
-	LDA a:word_50+1
+	ADCc word_50
+	STAc off_2
+	LDAc word_50+1
 	ADC #0
-	STA a:off_2+1
+	STAc off_2+1
 	RTS
 ; End of function LoadRoomStuff
 
@@ -2702,9 +2723,9 @@ DrawFullScreen:
 	STY byte_3C3
 	STY byte_3C4
 	STY a:byte_F4
-	LDA a:PPUMaskMirror
+	LDAc PPUMaskMirror
 	ORA #6
-	STA a:PPUMaskMirror
+	STAc PPUMaskMirror
 	LDA (off_3D),Y
 	LSR A
 	BCS loc_90EC
@@ -2716,14 +2737,14 @@ DrawFullScreen:
 	LSR A
 	TAX
 	LDA byte_9104,X
-	ORA RoomStatusFlags
-	STA RoomStatusFlags
+	ORA a:RoomStatusFlags
+	STA a:RoomStatusFlags
 	LDA (off_3D),Y
 	AND #4
 	BEQ loc_90EC
-	LDA a:PPUMaskMirror
+	LDAc PPUMaskMirror
 	AND #$F9
-	STA a:PPUMaskMirror
+	STAc PPUMaskMirror
 	LDA byte_9105,X
 	STA byte_3C2
 
@@ -2731,7 +2752,7 @@ loc_90EC:
 	LDA (off_3D),Y
 	AND #4
 	TAX
-	ORA a:PPUCtrlMirror
+	ORAc PPUCtrlMirror
 	AND #$FD
 	JSR SetPPUCtrl
 	LDA #6
@@ -2918,9 +2939,9 @@ loc_921F:
 	BEQ locret_921E
 	JSR LoadRoomStuff
 	DEY
-	STY a:byte_9
+	STYc byte_9
 	LDA #$E
-	STA a:byte_8
+	STAc byte_8
 	JSR HandleDrawHalfRow		; another pointer thing
 	LDA #$B
 	STA byte_3EF
@@ -2928,14 +2949,14 @@ loc_921F:
 	STA byte_3F0
 
 loc_923E:
-	LDA a:byte_9
+	LDAc byte_9
 	CMP #8
 	BNE loc_924A
 	LDY #1
 	JSR HandleDrawHalfRow		; another pointer thing
 
 loc_924A:
-	LDA a:byte_9
+	LDAc byte_9
 	AND #7
 	TAY
 	LDA (off_4),Y
@@ -2948,8 +2969,8 @@ loc_924A:
 	CLC
 	ADC #2
 	STA byte_3F0
-	INC a:byte_9
-	LDA a:byte_9
+	INCc byte_9
+	LDAc byte_9
 	CMP #$10
 	BNE loc_923E
 	LDA #0
@@ -2968,26 +2989,26 @@ sub_9276:
 
 loc_9280:
 	EOR #$FF
-	STA a:byte_F
-	INC a:byte_F
+	STAc byte_F
+	INCc byte_F
 	TXA
 	AND #$F0
 	ORA #8
 	CLC
-	ADC a:byte_F
+	ADCc byte_F
 	STA a:byte_92
 	LDA byte_3C2
 	EOR #$FF
-	STA a:byte_F
-	INC a:byte_F
+	STAc byte_F
+	INCc byte_F
 	TXA
 	ASL A
 	ASL A
 	ASL A
 	ASL A
 	ORA #8
-	ADC a:byte_F
-	STA a:byte_94
+	ADCc byte_F
+	STAc byte_94
 	RTS
 ; End of function sub_9276
 
@@ -3013,8 +3034,8 @@ sub_92AD:
 
 loc_92C8:
 	AND #$F
-	STA a:byte_9
-	LDA RoomStatusFlags
+	STAc byte_9
+	LDA a:RoomStatusFlags
 	AND #$30
 	BNE locret_92E1
 	LDA a:byte_F4
@@ -3059,15 +3080,15 @@ loc_92FD:
 	PHA
 	JSR LoadRoomData
 	PLA
-	LDY a:byte_5F
+	LDYc byte_5F
 	BEQ loc_931F
-	STY a:byte_F
+	STYc byte_F
 	LDY #0
 
 loc_930C:
 	CMP RoomDataRAM,Y
 	BEQ loc_9330
-	DEC a:byte_F
+	DECc byte_F
 	BEQ loc_931F
 	TAX
 	TYA
@@ -3088,14 +3109,14 @@ loc_931F:
 
 loc_9330:
 	LDA #0
-	STA a:byte_683
+	STAc byte_683
 
 loc_9335:
 	INY
 	INY
-	STY a:byte_5A
+	STYc byte_5A
 	LDA #0
-	STA a:byte_AC
+	STAc byte_AC
 	RTS
 ; End of function IfNotTitleScreenRoomDoThings
 
@@ -3103,9 +3124,9 @@ loc_9335:
 
 GameState_2_LoadRoom:
 	LDA #0
-	STA a:MaybeBombThing		; maybe	related	to all fire bombs
-	STA RoomStatusFlags
-	INC a:GameState			; 2 -> 3
+	STAc MaybeBombThing		; maybe	related	to all fire bombs
+	STA a:RoomStatusFlags
+	INCc GameState			; 2 -> 3
 	LDA #BasePointer_RoomDataPointers
 	JSR LoadPointerTo050		; 5 room data pointers
 	LDA CurrentRoomID		; Load current room
@@ -3174,17 +3195,17 @@ loc_93B5:
 	ASL A
 	TAY
 	LDA (word_50),Y
-	STA a:byte_5A
+	STAc byte_5A
 	INY
 	LDA (word_50),Y
-	STA a:byte_5B
+	STAc byte_5B
 	LDA #0
-	STA a:byte_5F
+	STAc byte_5F
 
 loc_93D1:
 	LDA #0
-	STA a:byte_B
-	LDY a:byte_5F
+	STAc byte_B
+	LDYc byte_5F
 	INY
 	LDA (byte_5A),Y
 	BEQ loc_93E2
@@ -3197,17 +3218,17 @@ loc_93E2:
 	CMP #$90
 	BCS loc_93EE
 	LDA #2
-	STA a:byte_B
+	STAc byte_B
 
 loc_93EE:
-	LDY a:byte_5F
+	LDYc byte_5F
 	LDA (byte_5A),Y
 	PHA
 	BEQ loc_93F9
 	JSR LoadRoomData
 
 loc_93F9:
-	LDA a:byte_5F
+	LDAc byte_5F
 	ASL A
 	ASL A
 	ASL A
@@ -3217,7 +3238,7 @@ loc_93F9:
 	STA RoomDataRAM,Y
 	BEQ locret_940F
 	JSR ReadRoomData		; Parse	room data?
-	INC a:byte_5F
+	INCc byte_5F
 	BNE loc_93D1
 
 locret_940F:
@@ -3551,7 +3572,7 @@ loc_95BD:
 	AND #$F
 	STA a:byte_AC
 	LDA #RF_BombRoom
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BEQ loc_95E1
 	LDA #$18
 	STA a:byte_AC
@@ -4202,7 +4223,7 @@ loc_99DB:
 ; =============== S U B	R O U T	I N E =======================================
 
 sub_99EA:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_ScrollStop
 	BNE loc_99F4
 	JMP loc_9A6B
@@ -4247,9 +4268,9 @@ loc_9A0F:
 	ADC #0
 	BEQ loc_9A39
 	LDA #$10
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BNE loc_9A39
-	LDX RoomStatusFlags
+	LDX a:RoomStatusFlags
 	BMI loc_9A39
 	LDY #3
 	LDA (off_3D),Y
@@ -4314,7 +4335,7 @@ sub_9A7A:
 
 loc_9A87:
 	STA byte_0
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_Horizontal|RF_SectionStart
 	PHP
 	LDY #$B
@@ -4370,7 +4391,7 @@ loc_9ADB:
 	LDA CurrentRoomID
 	LDX byte_7
 	BEQ loc_9AF2
-	LDX RoomStatusFlags
+	LDX a:RoomStatusFlags
 	BMI loc_9AF2
 	LDY #2
 	LDA (off_3D),Y
@@ -4461,7 +4482,7 @@ sub_9B6A:
 	TAY
 	LDA (off_4),Y
 	STA a:TilePlayerCollidedWith
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_ScrollStop
 	BNE loc_9B87
 	LDX byte_0
@@ -4961,7 +4982,7 @@ loc_9E68:
 	BCC loc_9E94
 	INC MaybeTempCollectableFlag
 	LDY #Sound_BombChestBonus	; next chest opened contains power coin
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #2
 	BEQ loc_9E8D
 	JSR SpawnPowerCoin
@@ -4984,7 +5005,7 @@ loc_9E9D:
 	JSR AddScore
 	LDA #0
 	JSR sub_A270
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_BombRoom
 	BEQ loc_9EB2
 	JMP loc_9F4B
@@ -5504,10 +5525,10 @@ sub_A1B9:
 	STA PlayerStruct
 	LDA #$40
 	STA byte_3E7
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_ScrollStop
 	BNE loc_A1E2
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_Horizontal|RF_SectionStart
 	BNE loc_A1E2
 	LDA byte_3C4
@@ -5560,10 +5581,10 @@ loc_A224:
 	LDA byte_3C4
 	AND #$F8
 	STA byte_3C4
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #$20
 	BNE loc_A23A
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #$C0
 	BEQ loc_A242
 
@@ -5719,7 +5740,7 @@ loc_A30B:
 ; =============== S U B	R O U T	I N E =======================================
 
 sub_A32B:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #$10
 	BEQ loc_A333
 	RTS
@@ -5884,7 +5905,7 @@ MainSub_3:
 	JSR MaybeLoadRoomFlags		; called with room id
 	LDA #1
 	STA a:PPUUpdateFlag1
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_SingleScreen
 	BEQ loc_A442
 	LDA a:PPUMaskMirror
@@ -5898,13 +5919,13 @@ MainSub_3:
 
 loc_A442:
 	LDA #RF_AtScrollEdge
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BEQ loc_A44A
 	RTS
 ; ---------------------------------------------------------------------------
 
 loc_A44A:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_ScrollStop
 	BNE loc_A454
 	JMP loc_A63C
@@ -5918,9 +5939,9 @@ loc_A454:
 	BNE loc_A46F
 	LDA MaybeRoomIDCopyAgain
 	BNE locret_A46E
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ORA #RF_AtScrollEdge
-	STA RoomStatusFlags
+	STA a:RoomStatusFlags
 
 locret_A46E:
 	RTS
@@ -5936,16 +5957,16 @@ loc_A46F:
 ; ---------------------------------------------------------------------------
 
 loc_A47B:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	BPL loc_A498
 	LDA byte_3C2
 	CMP #$F9
 	BCS loc_A498
 	LDA #$F8
 	STA byte_3C2
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ORA #RF_AtScrollEdge
-	STA RoomStatusFlags
+	STA a:RoomStatusFlags
 	INC a:PPUUpdateFlag1
 	RTS
 ; ---------------------------------------------------------------------------
@@ -5962,9 +5983,9 @@ loc_A498:
 	ADC byte_3C2
 	STA byte_3C2
 	BCS loc_A4E3
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #~RF_Horizontal
-	STA RoomStatusFlags
+	STA a:RoomStatusFlags
 	LDY #0
 	LDA (off_3D),Y
 	AND #2
@@ -5979,9 +6000,9 @@ loc_A4CC:
 	BNE loc_A4DD
 
 loc_A4D2:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ORA #RF_SectionStart
-	STA RoomStatusFlags
+	STA a:RoomStatusFlags
 
 loc_A4DA:
 	JMP loc_A58C
@@ -5992,7 +6013,7 @@ loc_A4DD:
 	STA MaybeRoomIDCopyAgain
 
 loc_A4E3:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	BMI loc_A4DA			; #RF_SectionStart set
 	LDA byte_3C2
 	CLC
@@ -6012,14 +6033,14 @@ loc_A4F3:
 ; ---------------------------------------------------------------------------
 
 loc_A505:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ASL A
 	BPL loc_A51C			; #RF_Horizontal clear
 	LDA #0
 	STA byte_3C2
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ORA #RF_AtScrollEdge
-	STA RoomStatusFlags
+	STA a:RoomStatusFlags
 	INC a:PPUUpdateFlag1
 	RTS
 ; ---------------------------------------------------------------------------
@@ -6029,9 +6050,9 @@ loc_A51C:
 	LDY #3
 	LDA (off_3D),Y
 	BNE loc_A531
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ORA #RF_Horizontal
-	STA RoomStatusFlags
+	STA a:RoomStatusFlags
 	INC a:PPUUpdateFlag1
 	RTS
 ; ---------------------------------------------------------------------------
@@ -6046,16 +6067,16 @@ loc_A531:
 	ADC byte_3C2
 	STA byte_3C2
 	BCC loc_A581
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	BMI loc_A57A			; #RF_SectionStart set
 	LDY #3
 	LDA (off_3D),Y
 	BNE loc_A55E
 
 loc_A554:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ORA #RF_Horizontal
-	STA RoomStatusFlags
+	STA a:RoomStatusFlags
 	BNE loc_A58C
 
 loc_A55E:
@@ -6082,11 +6103,11 @@ loc_A572:
 loc_A57A:
 	AND #<~RF_SectionStart
 	; AND #$80
-	STA RoomStatusFlags		; clear	#RF_SectionStart
+	STA a:RoomStatusFlags		; clear	#RF_SectionStart
 	BPL loc_A58C			; (always taken)
 
 loc_A581:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	BPL loc_A58C			; if #RF_SectionStart clear
 	LDA CurrentRoomID
 
@@ -6210,13 +6231,13 @@ loc_A63C:
 ; ---------------------------------------------------------------------------
 
 loc_A659:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	BPL loc_A66F			; if #RF_SectionStart clear
 	LDA #0
 	STA byte_3C4
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ORA #RF_AtScrollEdge
-	STA RoomStatusFlags		; | #RF_AtScrollEdge
+	STA a:RoomStatusFlags		; | #RF_AtScrollEdge
 
 loc_A66B:
 	INC a:PPUUpdateFlag1
@@ -6225,9 +6246,9 @@ loc_A66B:
 
 loc_A66F:
 	JSR sub_A851
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #~RF_Horizontal
-	STA RoomStatusFlags		; & #~RF_Horizontal
+	STA a:RoomStatusFlags		; & #~RF_Horizontal
 	CLC
 	LDA PlayerYVelLo
 	ADC byte_3C3
@@ -6263,9 +6284,9 @@ loc_A6AD:
 	BNE loc_A6C4
 
 loc_A6B3:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ORA #RF_SectionStart
-	STA RoomStatusFlags		; | #RF_SectionStart
+	STA a:RoomStatusFlags		; | #RF_SectionStart
 	LDA #0
 	STA byte_3C4
 
@@ -6308,24 +6329,24 @@ loc_A6F1:
 ; ---------------------------------------------------------------------------
 
 loc_A6FC:
-	LDA RoomStatusFlags		; if #RF_Horizontal clear...
+	LDA a:RoomStatusFlags		; if #RF_Horizontal clear...
 	ASL A
 	BPL loc_A716
 	LDA #0
 	STA byte_3C3
 	STA byte_3C4
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ORA #RF_AtScrollEdge
-	STA RoomStatusFlags		; | #RF_AtScrollEdge
+	STA a:RoomStatusFlags		; | #RF_AtScrollEdge
 	INC a:PPUUpdateFlag1
 	RTS
 ; ---------------------------------------------------------------------------
 
 loc_A716:
 	JSR sub_A851
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #<~RF_SectionStart
-	STA RoomStatusFlags		; & #~RF_SectionStart
+	STA a:RoomStatusFlags		; & #~RF_SectionStart
 	CLC
 	LDA PlayerYVelLo
 	ADC byte_3C3
@@ -6371,9 +6392,9 @@ loc_A768:
 	BNE loc_A784
 
 loc_A773:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	ORA #RF_Horizontal
-	STA RoomStatusFlags		; | #RF_Horizontal
+	STA a:RoomStatusFlags		; | #RF_Horizontal
 	LDA #0
 	STA byte_3C4
 	INC a:PPUUpdateFlag1
@@ -6521,7 +6542,7 @@ loc_A865:
 ; =============== S U B	R O U T	I N E =======================================
 
 sub_A875:
-	LDA RoomStatusFlags		; if #RF_ScrollStop...
+	LDA a:RoomStatusFlags		; if #RF_ScrollStop...
 	AND #RF_ScrollStop
 	BNE loc_A87F
 	JMP loc_A8D0
@@ -6857,7 +6878,7 @@ DoorCond_19_TensScore30:
 ; room FB warp door
 
 DoorCond_1D_FBWarp1:
-	LDA RoomStatusFlags		; check	#RF_AtScrollEdge
+	LDA a:RoomStatusFlags		; check	#RF_AtScrollEdge
 	AND #RF_AtScrollEdge
 	BEQ locret_AAB3			;   if not, no warp
 	LDA PlayerMightyCoins		; any mighty coins?
@@ -8944,7 +8965,7 @@ LoadDifficultySettings:
 	LDA DifficultyTable,X
 	STA EnemySpawnTimer
 	INX
-	LDA RoomStatusFlags		; if bit 1 (#$02) clear, bump up diff
+	LDA a:RoomStatusFlags		; if bit 1 (#$02) clear, bump up diff
 	AND #2
 	BNE loc_B62F
 	INX
@@ -9313,7 +9334,7 @@ loc_B806:
 ; =============== S U B	R O U T	I N E =======================================
 
 InitPowerCoin:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_BombRoom
 	BEQ loc_B822
 	LDA #$78
@@ -9386,7 +9407,7 @@ loc_B87B:
 	LDX #0
 	CMP byte_C
 	PHP
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_SingleScreen
 	BEQ loc_B88F
 	PLA
@@ -9415,10 +9436,10 @@ SpawnLocFunc1:
 	STA byte_0
 	TAX
 	LDA #$18
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BNE loc_B8CE
 	LDA #$20
-	BIT RoomStatusFlags
+	BIT a:RoomStatusFlags
 	BEQ loc_B8C0
 	ASL byte_0
 	ASL byte_0
@@ -9735,7 +9756,7 @@ sub_BA4E:
 	AND #$F8
 	TAX
 	LDA #$30
-	AND RoomStatusFlags
+	AND a:RoomStatusFlags
 	BEQ loc_BA75
 	CPX #$E0
 	BCC loc_BA75
@@ -9805,7 +9826,7 @@ loc_BAA8:
 ; =============== S U B	R O U T	I N E =======================================
 
 ObjCode_9_E_ExtraBonusCoin:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #2
 	BNE loc_BAB6
 	RTS
@@ -9962,7 +9983,7 @@ loc_BB5E:
 	INY
 	STA (EnemyStructPointer),Y
 	JSR sub_BB39
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #2
 	BEQ loc_BBB0
 	LDY #EnemyStruct_B_YPosHi
@@ -9990,7 +10011,7 @@ loc_BBB0:
 	BPL loc_BBCF
 
 loc_BBBD:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_BombRoom
 	BEQ TransformMummy
 	LDA a:TempPointer_0C0+1
@@ -10139,7 +10160,7 @@ ObjCode_7_Horus:
 ; =============== S U B	R O U T	I N E =======================================
 
 ObjInit_8_PowerCoin:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #2
 	BNE loc_BC84
 	LDY #EnemyStruct_A_YVelHi
@@ -10166,7 +10187,7 @@ loc_BC84:
 ; =============== S U B	R O U T	I N E =======================================
 
 ObjCode_8_PowerCoin:
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #2
 	BNE loc_BCB3
 	LDY #EnemyStruct_D
@@ -10195,7 +10216,7 @@ loc_BCB3:
 ObjInit_9_E_ExtraBonusCoin:
 	LDA #Sound_BonusCoinSpawn
 	JSR QueueSound			; bonus	coin spawned
-	LDA RoomStatusFlags
+	LDA a:RoomStatusFlags
 	AND #RF_BombRoom
 	BEQ loc_BCCA
 	JSR sub_BB1C
