@@ -48,8 +48,8 @@ ENDIF
 	TYA
 	DEY
 	LDX #7
-	STX a:byte_1
-	STY a:byte_0
+	STXc byte_1
+	STYc byte_0
 
 loc_8041:
 	STA (byte_0),Y

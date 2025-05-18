@@ -23,7 +23,10 @@ IFDEF REV_US
 	WEAK_COPYRIGHT_CHECK	= 0
 	NES_MAPPER_NUM			= 3	; CNROM
 	CHR_ROM_BANKS			= 4
+	USE_MORE_ZP equ 1
 ENDIF
+
+
 
 ; -----------------------------------------
 ; Add iNES header
