@@ -5472,19 +5472,19 @@ _No1UPYet:
 	PLA
 
 _NotExtraCoin:
-	STA a:byte_12
+	STAc byte_12
 	LDA #$F
 	STA a:_MaybeBlockSpawningObj
 	JSR sub_BA00
 	LDA a:byte_F0
 	JSR sub_9276
-	LDA a:byte_12
+	LDAc byte_12
 	JSR InitEnemy
 	LDY #EnemyStruct_5_XPosHi
-	LDA a:byte_94
+	LDAc byte_94
 	STA (EnemyStructPointer),Y
 	LDY #EnemyStruct_B_YPosHi
-	LDA a:byte_92
+	LDAc byte_92
 	STA (EnemyStructPointer),Y
 	RTS
 ; End of function MaybeSpawnThingFromObject
@@ -5642,7 +5642,7 @@ loc_A267:
 sub_A270:
 	LDA #BasePointer_RAM_786
 	JSR LoadPointerTo050		; C (786)
-	LDX a:byte_5A
+	LDXc byte_5A
 	LDA RoomDataRAM,X
 	LDX #1
 	AND #$40
@@ -5650,15 +5650,15 @@ sub_A270:
 	INX
 
 loc_A282:
-	STX a:byte_787
-	LDA a:byte_70
+	STX byte_787
+	LDAc byte_70
 	JSR sub_9276
-	LDA a:byte_94
-	STA a:byte_789
-	LDA a:byte_92
-	STA a:byte_78B
+	LDAc byte_94
+	STA byte_789
+	LDAc byte_92
+	STA byte_78B
 	LDA #$80
-	STA a:byte_786
+	STA byte_786
 ; End of function sub_A270
 
 ; =============== S U B	R O U T	I N E =======================================
@@ -5666,24 +5666,24 @@ loc_A282:
 sub_A29C:
 	JSR MaybeAward1UP
 	LDA #4
-	BIT a:byte_786
+	BIT byte_786
 	BNE loc_A2B1
-	ORA a:byte_786
-	STA a:byte_786
+	ORA byte_786
+	STA byte_786
 	LDA #4
-	STA a:byte_78D
+	STA byte_78D
 
 loc_A2B1:
-	DEC a:byte_78D
+	DEC byte_78D
 	BNE loc_A2C3
 	LDA #3
-	STA a:byte_78D
+	STA byte_78D
 	LDA SpriteDMAArea+$11
 	EOR #2
 	STA SpriteDMAArea+$11
 
 loc_A2C3:
-	LDA a:byte_786
+	LDA byte_786
 	LSR A
 	BCS loc_A2D8
 	SEC
@@ -5693,50 +5693,50 @@ loc_A2C3:
 ; ---------------------------------------------------------------------------
 
 loc_A2CE:
-	STA a:byte_786
+	STA byte_786
 	LDY #6
 	LDA #$20
-	STA a:byte_78C
+	STA byte_78C
 
 loc_A2D8:
 	LDA #2
-	BIT a:byte_786
+	BIT byte_786
 	BNE loc_A2F3
 	LDA #$25
-	DEC a:byte_78C
+	DEC byte_78C
 	BNE loc_A30B
 	LDA #2
-	ORA a:byte_786
-	STA a:byte_786
+	ORA byte_786
+	STA byte_786
 	LDA #$20
-	STA a:byte_78C
+	STA byte_78C
 
 loc_A2F3:
-	DEC a:byte_78C
+	DEC byte_78C
 	BNE loc_A303
 	LDA #0
-	STA a:byte_786
+	STA byte_786
 	LDY #$14
 	JSR ClearFourSpritesInY
 	RTS
 ; ---------------------------------------------------------------------------
 
 loc_A303:
-	LDA a:byte_787
+	LDA byte_787
 	JSR sub_8FB1			; score	popups?
 	LDA #$80
 
 loc_A30B:
-	STA a:TempSpriteTile
+	STAc TempSpriteTile
 	LDA #0
-	STA a:TempSpriteAttributesish
+	STAc TempSpriteAttributesish
 	LDA #5
-	STA a:CurrentSpriteIndex
+	STAc CurrentSpriteIndex
 	JSR sub_A32B
-	LDA a:byte_789
-	STA a:TempSpriteX
-	LDA a:byte_78B
-	STA a:TempSpriteY
+	LDA byte_789
+	STAc TempSpriteX
+	LDA byte_78B
+	STAc TempSpriteY
 	JSR WriteSprite
 	RTS
 ; End of function sub_A29C
@@ -5812,15 +5812,15 @@ _Draw1UPSprite:
 	LDA PlayerYPosHi
 	SEC
 	SBC #$10
-	STA a:TempSpriteY
+	STAc TempSpriteY
 	LDA PlayerXPosHi
 	SBC #8
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	LDA #$82
 	DEC Show1UPSpriteTimer
 	BNE loc_A3A7
 	LDX #0
-	STX a:MaybeCollectedThing2
+	STX MaybeCollectedThing2
 	LDA #$F
 
 loc_A3A7:
@@ -5840,13 +5840,13 @@ Draw1UPSprite:
 
 loc_A3B7:
 	STA SpriteDMAArea+5,X
-	LDA a:TempSpriteY
+	LDAc TempSpriteY
 	STA SpriteDMAArea,X
 	STA SpriteDMAArea+4,X
 	LDA #0
 	STA SpriteDMAArea+2,X
 	STA SpriteDMAArea+6,X
-	LDA a:TempSpriteX
+	LDAc TempSpriteX
 	STA SpriteDMAArea+3,X
 	CLC
 	ADC #8
@@ -5901,20 +5901,20 @@ byte_A406:
 MainSub_3:
 	JSR MaybeHandleDoorOpening
 	LDA #0
-	STA a:byte_98
-	STA a:byte_99
-	STA a:byte_9A
-	STA a:byte_9B
+	STAc byte_98
+	STAc byte_99
+	STAc byte_9A
+	STAc byte_9B
 	LDA CurrentRoomID
 	JSR MaybeLoadRoomFlags		; called with room id
 	LDA #1
-	STA a:PPUUpdateFlag1
-	LDA a:RoomStatusFlags
+	STAc PPUUpdateFlag1
+	LDAc RoomStatusFlags
 	AND #RF_SingleScreen
 	BEQ loc_A442
-	LDA a:PPUMaskMirror
+	LDAc PPUMaskMirror
 	ORA #6
-	STA a:PPUMaskMirror
+	STAc PPUMaskMirror
 	LDA #0
 	STA byte_3C2
 	STA byte_3C4
@@ -5923,29 +5923,29 @@ MainSub_3:
 
 loc_A442:
 	LDA #RF_AtScrollEdge
-	BIT a:RoomStatusFlags
+	BITc RoomStatusFlags
 	BEQ loc_A44A
 	RTS
 ; ---------------------------------------------------------------------------
 
 loc_A44A:
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	AND #RF_ScrollStop
 	BNE loc_A454
 	JMP loc_A63C
 ; ---------------------------------------------------------------------------
 
 loc_A454:
-	LDA a:PPUMaskMirror
+	LDAc PPUMaskMirror
 	AND #~(PPUMask_ShowLeft8Pixels_BG|PPUMask_ShowLeft8Pixels_SPR)
-	STA a:PPUMaskMirror
+	STAc PPUMaskMirror
 	LDA PlayerXVelHi
 	BNE loc_A46F
 	LDA MaybeRoomIDCopyAgain
 	BNE locret_A46E
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	ORA #RF_AtScrollEdge
-	STA a:RoomStatusFlags
+	STAc RoomStatusFlags
 
 locret_A46E:
 	RTS
@@ -5954,7 +5954,7 @@ locret_A46E:
 loc_A46F:
 	PHP
 	LDA #0
-	STA a:PPUUpdateFlag1
+	STAc PPUUpdateFlag1
 	PLP
 	BMI loc_A47B
 	JMP loc_A505
@@ -5968,10 +5968,10 @@ loc_A47B:
 	BCS loc_A498
 	LDA #$F8
 	STA byte_3C2
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	ORA #RF_AtScrollEdge
-	STA a:RoomStatusFlags
-	INC a:PPUUpdateFlag1
+	STAc RoomStatusFlags
+	INCc PPUUpdateFlag1
 	RTS
 ; ---------------------------------------------------------------------------
 
@@ -5987,9 +5987,9 @@ loc_A498:
 	ADC byte_3C2
 	STA byte_3C2
 	BCS loc_A4E3
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	AND #~RF_Horizontal
-	STA a:RoomStatusFlags
+	STAc RoomStatusFlags
 	LDY #0
 	LDA (off_3D),Y
 	AND #2
@@ -6004,7 +6004,7 @@ loc_A4CC:
 	BNE loc_A4DD
 
 loc_A4D2:
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	ORA #RF_SectionStart
 	STA a:RoomStatusFlags
 
@@ -6017,7 +6017,7 @@ loc_A4DD:
 	STA MaybeRoomIDCopyAgain
 
 loc_A4E3:
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	BMI loc_A4DA			; #RF_SectionStart set
 	LDA byte_3C2
 	CLC
@@ -6044,8 +6044,8 @@ loc_A505:
 	STA byte_3C2
 	LDA a:RoomStatusFlags
 	ORA #RF_AtScrollEdge
-	STA a:RoomStatusFlags
-	INC a:PPUUpdateFlag1
+	STAc RoomStatusFlags
+	INCc PPUUpdateFlag1
 	RTS
 ; ---------------------------------------------------------------------------
 
@@ -6054,10 +6054,10 @@ loc_A51C:
 	LDY #3
 	LDA (off_3D),Y
 	BNE loc_A531
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	ORA #RF_Horizontal
-	STA a:RoomStatusFlags
-	INC a:PPUUpdateFlag1
+	STAc RoomStatusFlags
+	INCc PPUUpdateFlag1
 	RTS
 ; ---------------------------------------------------------------------------
 
@@ -6071,16 +6071,16 @@ loc_A531:
 	ADC byte_3C2
 	STA byte_3C2
 	BCC loc_A581
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	BMI loc_A57A			; #RF_SectionStart set
 	LDY #3
 	LDA (off_3D),Y
 	BNE loc_A55E
 
 loc_A554:
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	ORA #RF_Horizontal
-	STA a:RoomStatusFlags
+	STAc RoomStatusFlags
 	BNE loc_A58C
 
 loc_A55E:
@@ -6107,11 +6107,11 @@ loc_A572:
 loc_A57A:
 	AND #<~RF_SectionStart
 	; AND #$80
-	STA a:RoomStatusFlags		; clear	#RF_SectionStart
+	STAc RoomStatusFlags		; clear	#RF_SectionStart
 	BPL loc_A58C			; (always taken)
 
 loc_A581:
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	BPL loc_A58C			; if #RF_SectionStart clear
 	LDA CurrentRoomID
 
@@ -6170,7 +6170,7 @@ loc_A5CB:
 	LDA byte_3F0
 	CMP byte_3CA
 	BNE loc_A5F3
-	INC a:PPUUpdateFlag1
+	INCc PPUUpdateFlag1
 	PLA
 	RTS
 ; ---------------------------------------------------------------------------
@@ -6222,7 +6222,7 @@ loc_A631:
 
 loc_A63C:
 	LDA #0
-	STA a:PPUUpdateFlag1
+	STAc PPUUpdateFlag1
 	LDA a:PPUMaskMirror
 	ORA #6
 	STA a:PPUMaskMirror
@@ -6235,13 +6235,13 @@ loc_A63C:
 ; ---------------------------------------------------------------------------
 
 loc_A659:
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	BPL loc_A66F			; if #RF_SectionStart clear
 	LDA #0
 	STA byte_3C4
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	ORA #RF_AtScrollEdge
-	STA a:RoomStatusFlags		; | #RF_AtScrollEdge
+	STAc RoomStatusFlags		; | #RF_AtScrollEdge
 
 loc_A66B:
 	INC a:PPUUpdateFlag1
@@ -6250,9 +6250,9 @@ loc_A66B:
 
 loc_A66F:
 	JSR sub_A851
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	AND #~RF_Horizontal
-	STA a:RoomStatusFlags		; & #~RF_Horizontal
+	STAc RoomStatusFlags		; & #~RF_Horizontal
 	CLC
 	LDA PlayerYVelLo
 	ADC byte_3C3
@@ -6288,14 +6288,14 @@ loc_A6AD:
 	BNE loc_A6C4
 
 loc_A6B3:
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	ORA #RF_SectionStart
-	STA a:RoomStatusFlags		; | #RF_SectionStart
+	STAc RoomStatusFlags		; | #RF_SectionStart
 	LDA #0
 	STA byte_3C4
 
 loc_A6C0:
-	INC a:PPUUpdateFlag1
+	INCc PPUUpdateFlag1
 	RTS
 ; ---------------------------------------------------------------------------
 
@@ -6339,18 +6339,18 @@ loc_A6FC:
 	LDA #0
 	STA byte_3C3
 	STA byte_3C4
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	ORA #RF_AtScrollEdge
-	STA a:RoomStatusFlags		; | #RF_AtScrollEdge
-	INC a:PPUUpdateFlag1
+	STAc RoomStatusFlags		; | #RF_AtScrollEdge
+	INCc PPUUpdateFlag1
 	RTS
 ; ---------------------------------------------------------------------------
 
 loc_A716:
 	JSR sub_A851
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	AND #<~RF_SectionStart
-	STA a:RoomStatusFlags		; & #~RF_SectionStart
+	STAc RoomStatusFlags		; & #~RF_SectionStart
 	CLC
 	LDA PlayerYVelLo
 	ADC byte_3C3
@@ -6372,9 +6372,9 @@ loc_A73D:
 	STX byte_3C6
 	PLP
 	BCC loc_A768
-	LDA a:PPUCtrlMirror
+	LDAc PPUCtrlMirror
 	EOR #2
-	STA a:PPUCtrlMirror
+	STAc PPUCtrlMirror
 	LDY #2
 	LDA (off_3D),Y
 	BEQ loc_A773
@@ -6396,12 +6396,12 @@ loc_A768:
 	BNE loc_A784
 
 loc_A773:
-	LDA a:RoomStatusFlags
+	LDAc RoomStatusFlags
 	ORA #RF_Horizontal
-	STA a:RoomStatusFlags		; | #RF_Horizontal
+	STAc RoomStatusFlags		; | #RF_Horizontal
 	LDA #0
 	STA byte_3C4
-	INC a:PPUUpdateFlag1
+	INCc PPUUpdateFlag1
 	RTS
 ; ---------------------------------------------------------------------------
 
@@ -6546,7 +6546,7 @@ loc_A865:
 ; =============== S U B	R O U T	I N E =======================================
 
 sub_A875:
-	LDA a:RoomStatusFlags		; if #RF_ScrollStop...
+	LDAc RoomStatusFlags		; if #RF_ScrollStop...
 	AND #RF_ScrollStop
 	BNE loc_A87F
 	JMP loc_A8D0
