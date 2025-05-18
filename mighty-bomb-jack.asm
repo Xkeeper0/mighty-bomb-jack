@@ -1,6 +1,16 @@
 ; -----------------------------------------
 ; Mighty Bomb Jack disassembly
 ; -----------------------------------------
+END_OF_ROM_PADDING = $FF
+WEAK_COPYRIGHT_CHECK = 1
+IFDEF REV_A
+	END_OF_ROM_PADDING = $00
+	WEAK_COPYRIGHT_CHECK = 0
+ENDIF
+IFDEF REV_US
+	END_OF_ROM_PADDING = $00
+	WEAK_COPYRIGHT_CHECK = 0
+ENDIF
 
 ; -----------------------------------------
 ; Add iNES header

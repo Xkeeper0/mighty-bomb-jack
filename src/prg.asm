@@ -24,7 +24,13 @@ loc_800C:
 _CopyProtectionCheck:
 	LDA CopyProtectBank		; Copy protection test
 	STA CopyProtectBank		; set chr bank $00
-IFDEF REV_A
+IF WEAK_COPYRIGHT_CHECK
+	LDA #0				; PPU address $0000
+	STA PPUADDR
+	STA PPUADDR
+	LDA PPUDATA			; bunk read to prime data bus
+	LDA PPUDATA			; read value at	ppu address $0000
+ELSE
 	LDX #0
 	STX PPUADDR
 	INX
@@ -32,12 +38,6 @@ IFDEF REV_A
 	LDA PPUDATA			; bunk read to prime data bus
 	LDA PPUDATA			; read value at	ppu address $0000
 	CMP #$3C
-ELSE
-	LDA #0				; PPU address $0000
-	STA PPUADDR
-	STA PPUADDR
-	LDA PPUDATA			; bunk read to prime data bus
-	LDA PPUDATA			; read value at	ppu address $0000
 ENDIF
 	BEQ _CopyProtectionCheck	; if $00, loop forever (lock up)
 	LDA CopyProtectBank+1		; set chr bank $11
