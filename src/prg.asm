@@ -3251,34 +3251,34 @@ locret_940F:
 
 ReadRoomData:
 	LDX #0
-	STX a:byte_C
+	STXc byte_C
 	CMP #$90
 	BCC loc_9420
 	CMP #$A0
 	BCS loc_9420
-	INC a:byte_C
+	INCc byte_C
 
 loc_9420:
 	INY
 	LDA #0
-	STA a:byte_F
-	STY a:byte_E
+	STAc byte_F
+	STYc byte_E
 
 loc_9429:
-	LDY a:byte_F
+	LDYc byte_F
 	LDA (off_58),Y
 	CMP #$FF
 	BNE loc_943A
-	LDY a:byte_E
+	LDYc byte_E
 	INY
 	STA RoomDataRAM,Y
 	RTS
 ; ---------------------------------------------------------------------------
 
 loc_943A:
-	INC a:byte_F
+	INCc byte_F
 	TAX					; X = byte read	from room data
-	LDA a:byte_AC
+	LDAc byte_AC
 	BNE loc_9486
 	TXA
 	AND #$F0
@@ -3286,40 +3286,40 @@ loc_943A:
 	DEX
 	TXA
 	AND #$F
-	STA a:byte_AC
-	LDA a:byte_5F
+	STAc byte_AC
+	LDAc byte_5F
 	BNE loc_9466
-	LDA a:byte_E
+	LDAc byte_E
 	AND #$F0
 	TAY
 	LDA RoomDataRAM,Y
 	CMP #$90
 	BCS loc_9466
 	LDA #1
-	STA a:byte_B
+	STAc byte_B
 
 loc_9466:
 	LDX #0
-	LDA a:byte_C
+	LDAc byte_C
 	BEQ loc_9496
 	LDA #$18
-	STA a:byte_AC
-	LDA a:byte_F
+	STAc byte_AC
+	LDAc byte_F
 	CLC
-	ADC a:off_58
+	ADCc off_58
 	STA a:byte_90
-	LDA a:off_58+1
+	LDAc off_58+1
 	ADC #0
 	STA a:byte_91
 	BNE loc_9496
 
 loc_9486:
 	LDX #0
-	DEC a:byte_AC
-	LDA a:byte_B
+	DECc byte_AC
+	LDAc byte_B
 	CMP #2
 	BEQ loc_9498
-	STX a:byte_B
+	STXc byte_B
 ; ---------------------------------------------------------------------------
 	.BYTE $2C				; BIT $0FE6
 					; (uses	INC $F below as	its operand)
@@ -3329,7 +3329,7 @@ loc_9496:
 	INC byte_F
 
 loc_9498:
-	STX a:byte_D			; X = byte from	room data
+	STXc byte_D			; X = byte from	room data
 	TXA
 	JSR HandleRoomDataObject	; = when byte >= 0x80
 	JMP loc_9429
@@ -3346,7 +3346,7 @@ HandleRoomDataObject:
 	LSR A
 	CMP #$B
 	BCS loc_94AD
-	INC a:byte_E
+	INCc byte_E
 
 loc_94AD:
 	JSR JumpTable
@@ -3374,14 +3374,14 @@ loc_94AD:
 ; =============== S U B	R O U T	I N E =======================================
 
 JT_94AD_0:
-	LDY a:byte_E
+	LDYc byte_E
 	LDA #5
 	STA RoomDataRAM,Y
-	LDX a:byte_B
+	LDXc byte_B
 	BEQ locret_94E8
 	DEX
 	BEQ loc_94E3
-	LDA a:byte_AC
+	LDAc byte_AC
 	BNE locret_94E8
 
 loc_94E3:
@@ -3395,9 +3395,9 @@ locret_94E8:
 ; =============== S U B	R O U T	I N E =======================================
 
 JT_94AD_multi:
-	LDY a:byte_E
+	LDYc byte_E
 	LDX #$10
-	LDA a:byte_D
+	LDAc byte_D
 	AND #$F0
 	CMP #$30
 	BEQ loc_94FB
@@ -3410,14 +3410,14 @@ loc_94FB:
 loc_94FC:
 	TXA
 	STA RoomDataRAM,Y
-	LDA a:byte_D
+	LDAc byte_D
 	AND #$F
 	CMP #6
 	BNE loc_950C
-	INC a:byte_F
+	INCc byte_F
 
 loc_950C:
-	LDA a:byte_D
+	LDAc byte_D
 	AND #$F0
 	BPL locret_951B
 	LDA #$20
@@ -3431,7 +3431,7 @@ locret_951B:
 ; =============== S U B	R O U T	I N E =======================================
 
 JT_94AD_5_6:
-	LDY a:byte_E
+	LDYc byte_E
 	LDA #$33
 	STA RoomDataRAM,Y
 	RTS
@@ -3440,12 +3440,12 @@ JT_94AD_5_6:
 ; =============== S U B	R O U T	I N E =======================================
 
 JT_94AD_7:
-	LDY a:byte_F
+	LDYc byte_F
 	DEY
 	DEY
 	LDA (off_58),Y
 	AND #$F
-	LDY a:byte_E
+	LDYc byte_E
 	STA RoomDataRAM,Y
 	LDX #1
 	CMP #9
@@ -3468,14 +3468,14 @@ locret_954A:
 ; =============== S U B	R O U T	I N E =======================================
 
 JT_94AD_8_Door:
-	LDY a:byte_F			; bytes	into room data
+	LDYc byte_F			; bytes	into room data
 	DEY
 	LDA (off_58),Y			; load previous	room data byte
 	AND #7				; lower	bits, "type" of	door?
 	TAX
 	LDA UnknownDoorTable97B0,X
 	PHP
-	LDX a:byte_E
+	LDXc byte_E
 	STA RoomDataRAM,X
 	PLP
 	BPL locret_956C
@@ -3501,7 +3501,7 @@ JT_94AD_rts:
 ; =============== S U B	R O U T	I N E =======================================
 
 JT_94AD_E:
-	INC a:byte_F
+	INCc byte_F
 	RTS
 ; End of function JT_94AD_E
 
@@ -3515,17 +3515,17 @@ LoadRoomData:
 	TYA					; A = (A at start - 1)
 	ASL A				; * 2 for index
 	BCC loc_9580			; If overflow,
-	INC a:word_50+1			;   inc	high byte by one
+	INCc word_50+1			;   inc	high byte by one
 
 loc_9580:
 	TAY					; Y = (A-1)*2
 	LDA (word_50),Y
-	STA a:off_58
+	STAc off_58
 	INY
 	LDA (word_50),Y
-	STA a:off_58+1
+	STAc off_58+1
 	LDA #0
-	STA a:byte_AC			; = 0
+	STAc byte_AC			; = 0
 	RTS
 ; End of function LoadRoomData
 
@@ -3535,12 +3535,12 @@ loc_9580:
 
 sub_9592:
 	LDY #0
-	STY a:MaybeCollectedThing
+	STYc MaybeCollectedThing
 	LDA (off_58),Y
 	CMP #$FF
 	BNE loc_95A5
 	LDA #0
-	STA a:byte_AC
+	STAc byte_AC
 	PLA
 	PLA
 	RTS
@@ -3550,10 +3550,10 @@ loc_95A5:
 	LDX #0
 	STX a:byte_71
 	TAX
-	LDA a:byte_AC
+	LDAc byte_AC
 	BEQ loc_95BD
-	STX a:byte_70
-	DEC a:byte_AC
+	STXc byte_70
+	DECc byte_AC
 	LDA #0
 	STA a:byte_5C
 	BEQ loc_95E1
@@ -3563,30 +3563,30 @@ loc_95BD:
 	INY
 	LDA (off_58),Y
 	STA a:UnknownDoorFlag
-	STA a:byte_70
+	STAc byte_70
 	TXA
 	AND #$F0
 	BNE loc_95E1
 	DEX
 	TXA
 	AND #$F
-	STA a:byte_AC
+	STAc byte_AC
 	LDA #RF_BombRoom
 	BIT a:RoomStatusFlags
 	BEQ loc_95E1
 	LDA #$18
-	STA a:byte_AC
+	STAc byte_AC
 
 loc_95E1:
 	INY
-	STY a:byte_0
-	LDY a:byte_5A
+	STYc byte_0
+	LDYc byte_5A
 	LDA RoomDataRAM,Y
-	STA a:MaybeCollectedThing
+	STAc MaybeCollectedThing
 	AND #$1F
 	TAX
 	LDA ItemToTileTable,X
-	STA a:MaybeTileCollected
+	STAc MaybeTileCollected
 	LDA a:byte_5C
 	CMP #$16
 	BEQ loc_9612
@@ -3602,16 +3602,16 @@ loc_95E1:
 	BNE loc_9677
 
 loc_9612:
-	LDY a:byte_0
+	LDYc byte_0
 	LDA (off_58),Y
 	STA SphinxCollectedMaybe
 
 loc_961A:
-	INC a:byte_0
+	INCc byte_0
 	BNE loc_9677
 
 loc_961F:
-	LDY a:byte_5A
+	LDYc byte_5A
 	LDA a:UnknownDoorFlag
 	AND #7
 	TAX
@@ -3628,15 +3628,15 @@ loc_961F:
 	STA RoomDataRAM,Y
 
 loc_963F:
-	LDA a:byte_5C
+	LDAc byte_5C
 	AND #$F
 	ASL A
 	ASL A
 	TAX
 	LDA DoorPositionTileTable,X
-	STA a:byte_70
+	STAc byte_70
 	LDA DoorPositionTileTable+1,X
-	STA a:byte_71
+	STAc byte_71
 	LDA RoomDataRAM,Y
 	LDY #2
 	ASL A
@@ -3646,29 +3646,29 @@ loc_963F:
 	INX
 
 loc_9660:
-	STY a:byte_14
+	STYc byte_14
 	CLC
 	LDA DoorPositionTileTable+2,X
-	ADC a:byte_14
-	STA a:MaybeTileCollected
+	ADCc byte_14
+	STAc MaybeTileCollected
 	LDA DoorPositionTileTable+2,X
 	SEC
-	ADC a:byte_14
-	STA a:byte_73
+	ADCc byte_14
+	STAc byte_73
 
 loc_9677:
-	LDA a:byte_0
+	LDAc byte_0
 	CLC
-	ADC a:off_58
-	STA a:off_58
-	LDA a:off_58+1
+	ADCc off_58
+	STAc off_58
+	LDAc off_58+1
 	ADC #0
-	STA a:off_58+1
-	LDA a:byte_5C
+	STAc off_58+1
+	LDAc byte_5C
 	AND #$F0
 	CMP #$B0
 	BCS locret_9695
-	INC a:byte_5A
+	INCc byte_5A
 
 locret_9695:
 	RTS
@@ -3679,10 +3679,10 @@ locret_9695:
 sub_9696:
 	LDA CurrentRoomID
 	JSR IfNotTitleScreenRoomDoThings ; A=room. double-returns if Z set
-	LDA a:PPUCtrlMirror
+	LDAc PPUCtrlMirror
 	AND #$FB
 	STA PPUCTRL
-	STA a:word_50+1
+	STAc word_50+1
 
 loc_96A7:
 	JSR sub_9592
@@ -3718,7 +3718,7 @@ sub_96B7:
 
 CopyAttributeTableToPPU:
 	LDX #0
-	LDA a:PPUCtrlMirror
+	LDAc PPUCtrlMirror
 	AND #$FB
 	STA PPUCTRL
 	LDA PPUSTATUS
@@ -3741,11 +3741,11 @@ loc_96E9:
 sub_96F5:
 	LDA a:byte_70,X
 	BEQ loc_9713
-	LDA a:byte_5C
+	LDAc byte_5C
 	AND #$F0
 	CMP #$B0
 	BCS loc_970C
-	LDA a:MaybeCollectedThing
+	LDAc MaybeCollectedThing
 	AND #$20
 	BNE loc_9713
 	BEQ locret_9715
@@ -3855,7 +3855,7 @@ HandleSpawnsAndMore:
 	JSR HandleEnemySpawnTimer
 	JSR sub_A29C
 	JSR MaybeDrawEnemySprites
-	LDA a:PPUUpdateFlag1
+	LDAc PPUUpdateFlag1
 	BNE loc_97CA
 	NOP					; POI: sus
 	NOP
@@ -3867,12 +3867,12 @@ loc_97CA:
 	LDA CurrentRoomID
 	JSR MaybeLoadRoomFlags		; called with room id
 	LDA ObjectPointers
-	STA a:off_78
+	STAc off_78
 	LDA ObjectPointers+1
-	STA a:off_78+1
+	STAc off_78+1
 	LDX #0
 	STX byte_330
-	STX a:byte_314
+	STX byte_314
 	JSR sub_99EA
 	LDA byte_330
 	BEQ loc_9805
@@ -3906,9 +3906,9 @@ loc_9805:
 ; =============== S U B	R O U T	I N E =======================================
 
 sub_9813:
-	STA a:byte_11
+	STAc byte_11
 	LDA #8
-	STA a:byte_10
+	STAc byte_10
 
 loc_981B:
 	LDX byte_332
@@ -3938,11 +3938,11 @@ loc_9825:
 	JSR sub_BA4E
 
 loc_984A:
-	DEC a:byte_11
+	DECc byte_11
 	BEQ locret_9854
 
 loc_984F:
-	DEC a:byte_10
+	DECc byte_10
 	BNE loc_981B
 
 locret_9854:
@@ -4201,17 +4201,17 @@ loc_99BB:
 	LDA byte_30F
 	AND #$AA
 	LSR A
-	STA a:byte_0
+	STAc byte_0
 	LDA byte_30F
 	AND #$55
-	ORA a:byte_0
-	STA a:byte_0
+	ORAc byte_0
+	STAc byte_0
 	LDA #0
 	LDX #4
 
 loc_99DB:
-	ASL a:byte_0
-	ASL a:byte_0
+	ASLc byte_0
+	ASLc byte_0
 	ROL A
 	DEX
 	BNE loc_99DB
@@ -4739,11 +4739,11 @@ loc_9D04:
 	BNE loc_9D1F
 
 loc_9D08:
-	LDA a:MaybeCollectedThing
+	LDAc MaybeCollectedThing
 	AND #$20
 	BNE loc_9D1F
 	INX
-	LDA a:byte_70
+	LDAc byte_70
 	STA byte_320,X
 	LDA a:byte_71
 	BEQ loc_9D1F
@@ -4752,23 +4752,23 @@ loc_9D08:
 
 loc_9D1F:
 	STX byte_320
-	LDA a:byte_70
+	LDAc byte_70
 	CMP byte_A
 	BEQ loc_9D88
 	LDA #0
-	STA a:byte_310
+	STAc byte_310
 	LDX byte_B
 	BEQ loc_9D5A
-	CPX a:byte_70
+	CPXc byte_70
 	BEQ loc_9D43
-	LDA a:byte_71
+	LDAc byte_71
 	BEQ loc_9D5A
 	CMP byte_B
 	BNE loc_9D5A
-	STA a:byte_70
+	STAc byte_70
 
 loc_9D43:
-	LDA a:MaybeCollectedThing
+	LDAc MaybeCollectedThing
 	AND #$1F
 	CMP #$10
 	BCC loc_9D88
@@ -4782,16 +4782,16 @@ loc_9D43:
 loc_9D5A:
 	LDX byte_E
 	BEQ loc_9CF1
-	CPX a:byte_70
+	CPXc byte_70
 	BEQ loc_9D6F
-	LDA a:byte_71
+	LDAc byte_71
 	BEQ loc_9CF1
 	CMP byte_E
 	BNE loc_9CF1
-	STA a:byte_70
+	STAc byte_70
 
 loc_9D6F:
-	LDA a:MaybeCollectedThing
+	LDAc MaybeCollectedThing
 	AND #$1F
 	CMP #$10
 	BCC loc_9D88
@@ -4802,16 +4802,16 @@ loc_9D6F:
 	LDA #$C
 
 loc_9D82:
-	ORA a:byte_312
-	STA a:byte_312
+	ORA byte_312
+	STA byte_312
 
 loc_9D88:
-	LDA a:MaybeCollectedThing
+	LDAc MaybeCollectedThing
 	AND #$1F
 	CMP #$F
 	BCS loc_9D99
 	LDX byte_A
-	CPX a:byte_70
+	CPXc byte_70
 	BEQ loc_9D99
 	RTS
 ; ---------------------------------------------------------------------------
@@ -4824,7 +4824,7 @@ loc_9D99:
 
 loc_9DA0:
 	DEC a:byte_5A
-	LDA a:MaybeCollectedThing
+	LDAc MaybeCollectedThing
 	AND #$1F
 	JSR JumpTable
 ; ---------------------------------------------------------------------------
@@ -4853,13 +4853,13 @@ loc_9DA0:
 ; =============== S U B	R O U T	I N E =======================================
 
 MaybePickupItem:
-	LDA a:byte_70
+	LDAc byte_70
 	JSR sub_92AD
 	LDA #$2F
 	JSR HandleTileAttributes
 	LDA #$2F
 	JSR sub_9716
-	LDY a:byte_5A
+	LDYc byte_5A
 	LDA RoomDataRAM,Y
 	TAX
 	LDA #$F
@@ -4939,10 +4939,10 @@ JTPickup_MightyDrink:
 	JSR AddScore
 	LDA #Sound_TimePickup		; mighty milk yum
 	JSR QueueSound			; mighty drink
-	LDA a:StageTimer
+	LDAc StageTimer
 	CLC
 	ADC #$10
-	STA a:StageTimer
+	STAc StageTimer
 	CMP #$A0
 	BCC locret_9E5A			; if over 99, go to torture room
 ; End of function JTPickup_MightyDrink
@@ -4954,7 +4954,7 @@ GoToTheTortureRoom:
 	STA PlayerMightyCoins
 	STA TortureRoomSceneFlag
 	LDA #7
-	STA a:GameState			; -> 7
+	STAc GameState			; -> 7
 
 locret_9E5A:
 	RTS
@@ -4963,7 +4963,7 @@ locret_9E5A:
 ; =============== S U B	R O U T	I N E =======================================
 
 JTPickup_Bomb:
-	LDY a:byte_5A
+	LDYc byte_5A
 	LDA RoomDataRAM,Y
 	LDX #1
 	AND #$40
@@ -4971,7 +4971,7 @@ JTPickup_Bomb:
 	INX
 
 loc_9E68:
-	STX a:byte_0
+	STXc byte_0
 	LDA MaybeTempCollectableFlag
 	BNE loc_9E94
 	TXA
@@ -4995,13 +4995,13 @@ loc_9E8D:
 ; ---------------------------------------------------------------------------
 
 loc_9E94:
-	LDA a:byte_0
+	LDAc byte_0
 	CLC
 	ADC #6				; 7 / 8	are bomb pickup	sounds
 	JSR QueueSound			; bomb pickup?
 
 loc_9E9D:
-	LDA a:byte_0
+	LDAc byte_0
 	JSR AddScore
 	LDA #0
 	JSR sub_A270
@@ -5015,7 +5015,7 @@ loc_9EB2:
 	LDA a:byte_F7
 	BNE loc_9EDB
 	INC a:byte_F7
-	LDY a:byte_5A
+	LDYc byte_5A
 	LDA RoomDataRAM,Y
 	BPL loc_9EC9
 	LDA #1
@@ -5034,7 +5034,7 @@ loc_9EC9:
 	BEQ loc_9F1E
 
 loc_9EDB:
-	LDY a:byte_5A
+	LDYc byte_5A
 	LDA RoomDataRAM,Y
 	AND #$40
 	BEQ loc_9F09
@@ -5050,7 +5050,7 @@ loc_9EDB:
 	JSR AddScore
 	LDA #Sound_BombBonus		; collected bombs in right order
 	JSR QueueSound			; bomb bonus
-	LDY a:byte_5A
+	LDYc byte_5A
 	JMP loc_9F1E
 ; ---------------------------------------------------------------------------
 
@@ -5106,20 +5106,20 @@ loc_9F4B:
 	INC a:byte_F7
 	LDY a:byte_5A
 	LDX #0
-	STX a:FireBombsCollected
-	STX a:FireBombsCollected2
+	STXc FireBombsCollected
+	STXc FireBombsCollected2
 	BEQ loc_9F8C
 
 loc_9F60:
-	LDY a:byte_5A
+	LDYc byte_5A
 	LDA RoomDataRAM,Y
 	AND #$40
 	BEQ loc_9F6D
-	INC a:FireBombsCollected
+	INCc FireBombsCollected
 
 loc_9F6D:
-	INC a:FireBombsCollected2
-	LDA a:FireBombsCollected2
+	INCc FireBombsCollected2
+	LDAc FireBombsCollected2
 	CMP #23				; bomb rooms have 23 bombs?
 	BNE loc_9F82
 	LDA #$F8
@@ -5132,7 +5132,7 @@ loc_9F82:
 	LDA RoomDataRAM,Y
 	AND #$40
 	BEQ loc_9FAB
-	LDY a:byte_5A
+	LDYc byte_5A
 
 loc_9F8C:
 	INY
@@ -5220,7 +5220,7 @@ JTPickup_CrystalBall2:
 ; =============== S U B	R O U T	I N E =======================================
 
 JTPickup_Family:
-	LDY a:byte_5A
+	LDYc byte_5A
 	LDA RoomDataRAM,Y
 	CLC
 	ADC #6
@@ -5236,6 +5236,10 @@ JTPickup_Family:
 JTPickup_Beelzebub:
 	LDA #Music_CollectedFullFamily
 	JSR QueueSound			; full family collected
+IFDEF REV_US
+	LDA #Score_1000000
+	JSR AddScore
+ENDIF
 	JMP JTPickup_Family
 ; End of function JTPickup_Beelzebub
 
@@ -5248,28 +5252,28 @@ JT_9DF2_F_rts:
 ; =============== S U B	R O U T	I N E =======================================
 
 JTPickup_Chest:
-	LDA a:MaybeCollectedThing
+	LDAc MaybeCollectedThing
 	AND #$20
 	BEQ loc_A01F
-	LDA a:byte_310
+	LDA byte_310
 	BNE loc_A01F
 	LDA #0
-	STA a:byte_312
+	STA byte_312
 	RTS
 ; ---------------------------------------------------------------------------
 
 loc_A01F:
-	LDA a:byte_70
+	LDAc byte_70
 	STA a:byte_F0
-	LDA a:byte_5C
+	LDAc byte_5C
 	STA a:_MaybeBlockSpawningObj
-	LDA a:byte_5A
+	LDAc byte_5A
 	STA a:byte_74
 	LDA a:byte_F4
-	STA a:byte_311
-	LDA a:MaybeCollectedThing
-	STA a:byte_313
-	LDA a:byte_310
+	STA byte_311
+	LDAc MaybeCollectedThing
+	STA byte_313
+	LDA byte_310
 	BNE locret_A05B
 	LDA #0
 	STA a:byte_F0
@@ -5279,7 +5283,7 @@ loc_A01F:
 	LDA PlayerMightyLevel
 	CMP #2
 	BCC locret_A05B
-	LDA a:byte_70
+	LDAc byte_70
 	JSR MaybeOpenHiddenBlock
 
 locret_A05B:
@@ -5308,26 +5312,26 @@ JTPickup_Door:
 	AND #$20
 	BEQ loc_A07B
 	LDA #0
-	STA a:byte_312
+	STA byte_312
 	RTS
 ; ---------------------------------------------------------------------------
 
 loc_A07B:
-	LDY a:byte_5A
+	LDYc byte_5A
 	LDA RoomDataRAM,Y
 	AND #$40
 	BEQ locret_A0A8
 	LDA #0
 	JSR QueueSound			; silence
-	LDA a:byte_5C
+	LDAc byte_5C
 	AND #$F
 	STA EntryDoorType
 	LDA #9
-	STA a:GameState			; -> 9
+	STAc GameState			; -> 9
 	LDA a:UnknownDoorFlag
 	LSR A
 	BCS locret_A0A8
-	LDY a:byte_5A
+	LDYc byte_5A
 	LDA #$BF
 	AND RoomDataRAM,Y
 	STA RoomDataRAM,Y
@@ -5342,7 +5346,7 @@ locret_A0A8:
 
 OpenBombRoomDoor:
 	LDA #$B
-	STA a:GameState			; -> B
+	STAc GameState			; -> B
 	LDA CurrentRoomID
 	AND #$F
 	ASL A
