@@ -24,11 +24,21 @@ loc_800C:
 _CopyProtectionCheck:
 	LDA CopyProtectBank		; Copy protection test
 	STA CopyProtectBank		; set chr bank $00
+IFDEF REV_A
+	LDX #0
+	STX PPUADDR
+	INX
+	STX PPUADDR
+	LDA PPUDATA			; bunk read to prime data bus
+	LDA PPUDATA			; read value at	ppu address $0000
+	CMP #$3C
+ELSE
 	LDA #0				; PPU address $0000
 	STA PPUADDR
 	STA PPUADDR
 	LDA PPUDATA			; bunk read to prime data bus
 	LDA PPUDATA			; read value at	ppu address $0000
+ENDIF
 	BEQ _CopyProtectionCheck	; if $00, loop forever (lock up)
 	LDA CopyProtectBank+1		; set chr bank $11
 	STA CopyProtectBank+1
@@ -240,7 +250,7 @@ loc_8190:
 
 ; ---------------------------------------------------------------------------
 off_81AB:
-	.WORD PPUUpdateBuffer	 
+	.WORD PPUUpdateBuffer
 	.WORD AttributeTableBuffer		; 1
 
 ; =============== S U B	R O U T	I N E =======================================
@@ -595,7 +605,7 @@ SetPlayerVelocityFromX:
 
 ; ---------------------------------------------------------------------------
 DirectionOffsetTable:
-	.BYTE    6			 
+	.BYTE    6
 	.BYTE    4				; 1 ; (U, D, L,	R)
 	.BYTE    0				; 2
 	.BYTE    2				; 3
@@ -2209,7 +2219,7 @@ LoadPointerTo050:
 	RTS
 ; ---------------------------------------------------------------------------
 PointerTable050:
-	.WORD SpritesTable	 
+	.WORD SpritesTable
 	.WORD AdjacentRoomsTable		; 1 ; 42 entries, seems	to be
 	.WORD RoomHalfScreens		; 2 ; based on which rooms are
 	.WORD LayoutChunks			; 3 ; "in the same section"
@@ -3323,7 +3333,7 @@ loc_94AD:
 ; this may have	something to do	with
 ; handling item/obj placements from
 ; room loading -- high byte of "item type"?
-	.WORD JT_94AD_0			
+	.WORD JT_94AD_0
 	.WORD JT_94AD_multi			; 1
 	.WORD JT_94AD_multi			; 2
 	.WORD JT_94AD_multi			; 3
@@ -3802,9 +3812,16 @@ DoorPositionTileTable:
 	.BYTE  $20,	$30, $8B, $97		; $38
 	.BYTE  $B0,	$C0, $8B, $97		; $3C
 UnknownDoorTable97B0:
-	.BYTE $12		 
+	.BYTE $12
 	.BYTE	$52			; 1 ; entry #2:
+IFDEF REV_A
+	; POI: not exactly sure why this change is here...
+	; door type 2 is only used by two (broken? uopenable?)
+	; doors in the JP version; in US they were switched
+	.BYTE	$32
+ELSE
 	.BYTE	$72			; 2 ; #$72 here	/ #$32 in REV A	/ #$72 in US
+ENDIF
 	.BYTE	$92			; 3
 	.BYTE	$92			; 4
 	.BYTE	$B2			; 5
@@ -3965,7 +3982,7 @@ loc_98A3:
 	PLA
 	JSR JumpTable
 ; ---------------------------------------------------------------------------
-	.WORD JT_98A4_multi			
+	.WORD JT_98A4_multi
 	.WORD JT_98A4_multi			; 1
 	.WORD JT_98A4_multi			; 2
 	.WORD JT_98A4_multi			; 3
@@ -4790,7 +4807,7 @@ loc_9DA0:
 	AND #$1F
 	JSR JumpTable
 ; ---------------------------------------------------------------------------
-	.WORD MaybePickupItem		
+	.WORD MaybePickupItem
 	.WORD MaybePickupItem		; 1
 	.WORD MaybePickupItem		; 2
 	.WORD MaybePickupItem		; 3
@@ -5814,7 +5831,7 @@ loc_A3B7:
 
 ; ---------------------------------------------------------------------------
 byte_A3D8:
-	.BYTE 0,	0	 
+	.BYTE 0,	0
 	.BYTE   -4, -8			; 2 ;  0,  0
 	.BYTE    4, -8			; 4 ; -4, -8
 	.BYTE   -4, 8			; 6 ; +4, -8
@@ -5835,7 +5852,7 @@ byte_A3EA:
 	.BYTE $AC
 	.BYTE $3C
 ObjectPointers:
-	.WORD PlayerStruct	 
+	.WORD PlayerStruct
 	.WORD Object0Struct			; 1
 	.WORD Object1Struct			; 2
 	.WORD Object2Struct			; 3
@@ -5845,7 +5862,7 @@ ObjectPointers:
 	.WORD Object6Struct			; 7
 	.WORD Object7Struct			; 8
 byte_A406:
-	.BYTE %1001111	 
+	.BYTE %1001111
 	.BYTE %10001111			; 1
 	.BYTE    %11111			; 2
 	.BYTE   %101111			; 3
@@ -6642,7 +6659,7 @@ SetBrotherRoomObjectPosition:
 
 ; ---------------------------------------------------------------------------
 BrotherRoomObjects:
-	.BYTE   $B,	$B, $10	 
+	.BYTE   $B,	$B, $10
 BrotherRoomXPositions:
 	.BYTE  $68, $A8, $88	 ; =============== S U B	R O U T	I N E =======================================
 
@@ -7326,12 +7343,12 @@ _EndGame:
 
 ; ---------------------------------------------------------------------------
 byte_AD19:
-	.BYTE	%11111100	 
+	.BYTE	%11111100
 	.BYTE %11110011			; 1 ; 1110 1101	1011 0111 (2 nib per #)
 	.BYTE %11001111			; 2
 	.BYTE %00111111			; 3
 UnknownDoorTable:
-	.BYTE	$1F		 
+	.BYTE	$1F
 	.BYTE    6				; 1
 	.BYTE  $17				; 2
 	.BYTE    3				; 3
@@ -7976,12 +7993,12 @@ loc_B0EB:
 
 ; ---------------------------------------------------------------------------
 EndingStringTable:
-	EndingText Strings_Ending1A, 3 ;  
+	EndingText Strings_Ending1A, 3 ;
 	EndingText Strings_Ending2A,   3 ;	; 1
 	EndingText Strings_Ending3A,   4 ;	; 2
 	EndingText Strings_Ending4A,   4 ;	; 3
 EndingPyramidDestroyDepth:
-	.BYTE 12		 
+	.BYTE 12
 	.BYTE  30				; 1
 	.BYTE  56				; 2
 	.BYTE  90				; 3
@@ -8761,9 +8778,9 @@ loc_B517:
 
 ; ---------------------------------------------------------------------------
 byte_B52C:
-	.BYTE 1,	2, $FF,	$FE 
+	.BYTE 1,	2, $FF,	$FE
 NoteFrequencyTable:
-	.WORD $591		 
+	.WORD $591
 	.WORD $541				; 1
 	.WORD $4F5				; 2
 	.WORD $4AE				; 3
@@ -8780,7 +8797,7 @@ NoteFrequencyTable:
 	.WORD    0				; $E
 	.WORD    0				; $F
 SoundPointersA:
-	.WORD SoundChannelA_Mus0	 
+	.WORD SoundChannelA_Mus0
 	.WORD SoundChannelA_Mus1		; 1
 	.WORD SoundChannelA_Mus2		; 2
 	.WORD SoundChannelA_Mus3		; 3
@@ -8789,7 +8806,7 @@ SoundPointersA:
 	.WORD SoundChannelA_Sfx2		; 6
 	.WORD SoundChannelA_Sfx3		; 7
 SoundPointersB:
-	.WORD SoundChannelB_Mus0	 
+	.WORD SoundChannelB_Mus0
 	.WORD SoundChannelB_Mus1		; 1 ; last entry not used(?)
 	.WORD SoundChannelB_Mus2		; 2
 	.WORD SoundChannelB_Mus3		; 3

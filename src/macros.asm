@@ -5,50 +5,55 @@ ENDM Palette
 
 ; ---------------------------------------------------------------------------
 
-MACRO SpriteData tile, attrib, xp, yp, spriteindex; (sizeof=0x5)
+MACRO SpriteData tile, attrib, xp, yp, spriteindex
 	.db tile, attrib, xp, yp, spriteindex
 ENDM SpriteData
 
 ; ---------------------------------------------------------------------------
 
-MACRO SoundData ch, ofs	; (sizeof=0x3)
+MACRO SoundData ch, ofs
 	.db ch
 	.dw ofs
 ENDM SoundData
 
 ; ---------------------------------------------------------------------------
 
-MACRO EndingText start, len ; (sizeof=0x2)
+MACRO EndingText start, len
 	.db start, len
 ENDM EndingText
 
 ; ---------------------------------------------------------------------------
 
-MACRO Sprite xp, id, at, xp; (sizeof=0x4)
+MACRO Sprite xp, id, at, xp
 	.db xp, id, at, xp
 ENDM Sprite
 
 ; ---------------------------------------------------------------------------
 
-MACRO ScoreValue digit, value ; (sizeof=0x2)
+MACRO ScoreValue digit, value
 	.db digit, value
 ENDM ScoreValue
 
 ; ---------------------------------------------------------------------------
 
-MACRO RoomHeader pal, mus, unk; (sizeof=0x3)
+MACRO RoomHeader pal, mus, unk
 	.db pal, mus, unk
 ENDM RoomHeader
 
 ; ---------------------------------------------------------------------------
 
-MACRO Door pos, type ; (sizeof=0x2)
+MACRO Door pos, type
 	.db pos, type
 ENDM Door
 
 ; ---------------------------------------------------------------------------
 
-MACRO SndJmp b_F0, target ; (sizeof=0x3)
-	.db b_F0
+MACRO SndJmpF0 target
+	.db $F0
+	.dw target
+ENDM SndJmp
+
+MACRO SndJmpF3 target
+	.db $F3
 	.dw target
 ENDM SndJmp

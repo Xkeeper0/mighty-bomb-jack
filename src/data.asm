@@ -5,7 +5,7 @@
 ; ------------------------------------------
 
 SpriteAnimationTable:
-	.WORD SpriteAnimation_0_D_F 
+	.WORD SpriteAnimation_0_D_F
 	.WORD SpriteAnimation_1		; 1
 	.WORD SpriteAnimation_2		; 2
 	.WORD SpriteAnimation_3		; 3
@@ -18,60 +18,60 @@ SpriteAnimationTable:
 	.WORD SpriteAnimation_A		; $A
 	.WORD SpriteAnimation_B		; $B
 	.WORD SpriteAnimation_C		; $C
-	.WORD SpriteAnimation_0_D_F		; $D
+	.WORD SpriteAnimation_0_D_F	; $D
 	.WORD SpriteAnimation_E		; $E
-	.WORD SpriteAnimation_0_D_F		; $F
-	.WORD SpriteAnimation_10		; $10
+	.WORD SpriteAnimation_0_D_F	; $F
+	.WORD SpriteAnimation_10	; $10
 
 ; first	byte: frame length
 ; second byte: frame #
 ; third	byte: attributes
 
 SpriteAnimation_0_D_F:
-	.BYTE    5,  $E, 3	 
+	.BYTE    5,  $E, 3
 	.BYTE    5, $F,   3		; 3 ; Mummy
 	.BYTE $FF
 SpriteAnimation_1:
-	.BYTE 5, $10,   3	 
+	.BYTE 5, $10,   3
 	.BYTE    5,	$11,   3		; 3 ; Mummy (falling)
 	.BYTE $FF
 SpriteAnimation_2:
-	.BYTE 5, $13,   2	 
+	.BYTE 5, $13,   2
 	.BYTE    5,	$12,   2		; 3 ; Hanezo (red bouncy guy)
 	.BYTE    5,	$13,   6		; 6
 	.BYTE $FF
 SpriteAnimation_3:
-	.BYTE 5,  $C,   2	 
+	.BYTE 5,  $C,   2
 	.BYTE    5, $D,   2		; 3 ; Geji Shogun (red bug)
 	.BYTE $FF
 SpriteAnimation_4:
-	.BYTE 5, $16,   3	 
+	.BYTE 5, $16,   3
 	.BYTE    5,	$17,   3		; 3 ; Gamedo (green turtle)
 	.BYTE    5,	$18,   3		; 6
 	.BYTE $FF
 SpriteAnimation_5:
-	.BYTE 5, $14,   3	 
+	.BYTE 5, $14,   3
 	.BYTE    5,	$15,   3		; 3 ; Dokuron (green skull)
 	.BYTE $FF
 SpriteAnimation_6:
-	.BYTE 5,	7,   0	 
+	.BYTE 5,	7,   0
 	.BYTE    5, 7,   8		; 3 ; Desufa (red fireball)
 	.BYTE $FF
 SpriteAnimation_7:
-	.BYTE 5,	8,   3	 
+	.BYTE 5,	8,   3
 	.BYTE    5, 9,   3		; 3 ; Horus (green bird)
 	.BYTE $FF
-	.BYTE    5, 8,   7		
+	.BYTE    5, 8,   7
 	.BYTE    5, 9,   7		; 3
 	.BYTE $FF
-	.BYTE    5, $A,   3		
+	.BYTE    5, $A,   3
 	.BYTE    5, $B,   3		; 3
 	.BYTE $FF
 SpriteAnimation_8:
 	.BYTE 5, $20,   1	 ; P coin
 	.BYTE $FF
 SpriteAnimation_9:
-	.BYTE 4, $1B,   0	 
+	.BYTE 4, $1B,   0
 	.BYTE    4,	$1C,   0		; 3 ; E	coin
 	.BYTE    4,	$1D,   0		; 6
 	.BYTE $FF
@@ -85,16 +85,16 @@ SpriteAnimation_C:
 	.BYTE 0, $24,   0	 ; Balloon
 	.BYTE $FF
 SpriteAnimation_E:
-	.BYTE 4, $19,   0	 
+	.BYTE 4, $19,   0
 	.BYTE    4,	$1A,   0		; 3 ; B	coin
 	.BYTE    4,	$1D,   0		; 6
 	.BYTE $FF
 SpriteAnimation_10:
-	.BYTE  $10, 0,   1	 
+	.BYTE  $10, 0,   1
 	.BYTE  $28, 1,   1		; 3 ; Brother
 	.BYTE $FF
 EnemyInitialStatus:
-	.BYTE      1		 
+	.BYTE      1
 	.BYTE      1			; 1
 	.BYTE      1			; 2
 	.BYTE      1			; 3
@@ -112,7 +112,7 @@ EnemyInitialStatus:
 	.BYTE %10001			; $F
 	.BYTE %10101			; $10
 DifficultyTable:
-	.BYTE 0, $A0, $80, $40 
+	.BYTE 0, $A0, $80, $40
 	.BYTE    1,	$80, $70, $38		; 4 ; based on last bomb room
 	.BYTE    1,	$70, $60, $30		; 8 ; (i.e. last "stage	x cleared")
 	.BYTE    2,	$60, $50, $28		; $C ;
@@ -129,7 +129,7 @@ DifficultyTable:
 	.BYTE    7,	$40,   8,   8		; $38 ;	(aka bomb) rooms
 	.BYTE    2,	$40,   8,   8		; $3C
 byte_C0CB:
-	.BYTE $4C		 
+	.BYTE $4C
 	.BYTE  $48				; 1
 	.BYTE  $44				; 2
 	.BYTE  $40				; 3
@@ -138,7 +138,7 @@ byte_C0CB:
 	.BYTE  $34				; 6
 	.BYTE  $30				; 7
 word_C0D3:
-	.WORD $58		 
+	.WORD $58
 	.WORD  $70				; 1
 	.WORD  $88				; 2
 	.WORD  $A0				; 3
@@ -147,7 +147,7 @@ word_C0D3:
 	.WORD  $E8				; 6
 	.WORD $100				; 7
 word_C0E3:
-	.WORD	$380		 
+	.WORD	$380
 	.WORD $37C				; 1
 	.WORD $378				; 2
 	.WORD $374				; 3
@@ -212,12 +212,12 @@ word_C0E3:
 	.WORD    2				; $3E
 	.WORD    1				; $3F
 word_C163:
-	.WORD $F0		 
+	.WORD $F0
 	.WORD $160				; 1
 	.WORD  $A0				; 2
 	.WORD  $D0				; 3
 MainPalette:
-	.BYTE  $21, $F, $26, $30		
+	.BYTE  $21, $F, $26, $30
 	.BYTE  $21, 8, $27, $38		; 4 ; background
 	.BYTE  $21, $A, $1A, $39		; 8
 	.BYTE  $21, $F, $16, $30		; $C
@@ -227,7 +227,7 @@ MainPalette:
 	.BYTE  $21, 8, $16, $30		; 8
 	.BYTE  $21, $F, $2B, $30		; $C
 BackgroundPaletteSets:
-	.BYTE   $A, $16, $26, $38	 
+	.BYTE   $A, $16, $26, $38
 	.BYTE   $A, $F, $10, $30		; 4 ; set 0
 	.BYTE   $A, $F, $16, $30		; 8
 
@@ -263,11 +263,11 @@ BackgroundPaletteSets:
 	.BYTE  $11, $F, $10, $30		; 4
 	.BYTE  $11,	$11, $16, $30		; 8
 MightyLevelColors:
-	.BYTE $16, $12, $26,	$2A 
+	.BYTE $16, $12, $26,	$2A
 MightyLevelAPressesTable:
 	.BYTE 1,  20,  30,	35 ; (1), 20, 30, 35
 MusicOptionsTable:
-	.BYTE	Music_MainWithIntro 
+	.BYTE	Music_MainWithIntro
 	.BYTE Music_Main			; 1 ; usual stage music
 	.BYTE Music_TreasureRoom		; 2
 	.BYTE Music_SideRoom		; 3
@@ -276,7 +276,7 @@ MusicOptionsTable:
 	.BYTE Music_Outside2		; 6
 	.BYTE Music_TortureRoom		; 7
 DoorEntryXYPositionTable:
-	.BYTE	$18, $20	 
+	.BYTE	$18, $20
 	.BYTE  $18,	$E0			; 2
 	.BYTE  $18,	$20			; 4
 	.BYTE  $18,	$E0			; 6
@@ -293,12 +293,12 @@ DoorEntryXYPositionTable:
 	.BYTE  $30, 8			; $1C
 	.BYTE  $C0, 8			; $1E
 VectorTable:
-	.BYTE    1, 0			
+	.BYTE    1, 0
 	.BYTE   -1, 0			; 2 ; RLUD (+1,	0 / -1,	0 /  0,-1 /  0,+1)
 	.BYTE    0, -1			; 4
 	.BYTE    0, 1			; 6
 MaybeEntryTypeTable:
-	.BYTE   $E, $A			
+	.BYTE   $E, $A
 	.BYTE    0, 9			; 2
 	.BYTE   $D, 9			; 4
 	.BYTE   $D, 9			; 6
@@ -315,7 +315,7 @@ MaybeEntryTypeTable:
 	.BYTE    9, 0			; $1C
 	.BYTE   $E, 0			; $1E
 SpritesTable:
-	.BYTE  $44, $10, $10, $12,	$12 
+	.BYTE  $44, $10, $10, $12,	$12
 	.BYTE  $44,	$11, $11, $13, $13	; 5 ; 46 (#$2E)	entries
 	.BYTE  $44,	$14, $14, $16, $16	; $A
 	.BYTE  $44,	$15, $15, $17, $17	; $F
@@ -362,7 +362,7 @@ SpritesTable:
 	.BYTE    0,	$B0, $B1, $B2, $B3	; $DC
 	.BYTE    0,	$B4, $B5, $B6, $B7	; $E1
 StringPointerTable:
-	.WORD String_PushStartButton 
+	.WORD String_PushStartButton
 	.WORD String_GameOver		; 1
 	.WORD String_TimeOver		; 2
 	.WORD String_YouAreGreedy		; 3
@@ -390,115 +390,115 @@ StringPointerTable:
 	.WORD String_SeeingItJackFoundOut	; $19
 	.WORD String_AndShoutedFather	; $1A
 String_PushStartButton:
-	.WORD $1C8		 
+	.WORD $1C8
 	.BYTE _P,_U,_S,_H,__,_S,_T,_A,_R,_T,__,_B,_U,_T,_T,_O,_N
 	.BYTE $FF
 String_GameOver:
-	.WORD $18C		 
-	.BYTE _G,_A,_M,_E,__,_O,_V,_E,_R	
+	.WORD $18C
+	.BYTE _G,_A,_M,_E,__,_O,_V,_E,_R
 	.BYTE $FF
 String_TimeOver:
-	.WORD $18C		 
-	.BYTE _T,_I,_M,_E,__,_O,_V,_E,_R	
+	.WORD $18C
+	.BYTE _T,_I,_M,_E,__,_O,_V,_E,_R
 	.BYTE $FF
 String_YouAreGreedy:
-	.WORD $109				
+	.WORD $109
 	.BYTE _Y,_O,_U,__,_A,_R,_E,__,_G,_R,_E,_E,_D,_Y
 	.BYTE $FF
 String_GoToTheTortureRoom:
-	.WORD	$1A4		 
+	.WORD	$1A4
 	.BYTE _G,_O,__,_T,_O,__,_T,_H,_E,__,_T,_O,_R,_T,_U,_R,_E,__,_R,_O,_O,_M
 	.BYTE $FF
 String_Round_Clear:
-	.WORD $109		 
+	.WORD $109
 	.BYTE _R,_O,_U,_N,_D,__,__,__,__,_C,_L,_E,_A,_R
 	.BYTE $FF
 String_TimeBonus:
-	.WORD $1E7		 
-	.BYTE _T,_I,_M,_E,__,_B,_O,_N,_U,_S	
+	.WORD $1E7
+	.BYTE _T,_I,_M,_E,__,_B,_O,_N,_U,_S
 	.BYTE $FF
 String_YouveGotten:
-	.WORD $249		 
+	.WORD $249
 	.BYTE _Y,_O,_U,_ap,_V,_E,__,_G,_O,_T,_T,_E,_N
 	.BYTE $FF
 String_FireBombs:
-	.WORD $2AC		 
-	.BYTE _F,_I,_R,_E,__,_B,_O,_M,_B,_S	
+	.WORD $2AC
+	.BYTE _F,_I,_R,_E,__,_B,_O,_M,_B,_S
 	.BYTE $FF
 String_SpecialBonus:
-	.WORD $305				
+	.WORD $305
 	.BYTE _S,_P,_E,_C,_I,_A,_L,__,_B,_O,_N,_U,_S
 	.BYTE $FF
 String_YourGDV:
-	.WORD $20A		 
-	.BYTE _Y,_O,_U,_R,__,_G,_D,_V	
+	.WORD $20A
+	.BYTE _Y,_O,_U,_R,__,_G,_D,_V
 	.BYTE $FF
 String_C_Tecmo:
-	.WORD $213		 
-	.BYTE _cp,__,_T,_E,_C,_M,_O		
+	.WORD $213
+	.BYTE _cp,__,_T,_E,_C,_M,_O
 	.BYTE $FF
 String_HighGDV:
-	.WORD  $56		 
-	.BYTE _H,_I,__,_G,_D,_V		
+	.WORD  $56
+	.BYTE _H,_I,__,_G,_D,_V
 	.BYTE $FF
 String_TheCurseOfBelzebutHas:
-	.WORD  $64			 
+	.WORD  $64
 	.BYTE _T,_H,_E,__,_C,_U,_R,_S,_E,__,_O,_F,__,_B,_E,_L,_Z,_E,_B,_U,_T,__,_H,_A,_S
 	.BYTE $FF
 String_BeenSolvedAndPeaceHas:
-	.WORD  $A3			 
+	.WORD  $A3
 	.BYTE _B,_E,_E,_N,__,_S,_O,_L,_V,_E,_D,_cma,_A,_N,_D,__,_P,_E,_A,_C,_E,__,_H,_A,_S
 	.BYTE $FF
 String_AgainComeToTheWorld:
-	.WORD  $E3		 
+	.WORD  $E3
 	.BYTE _A,_G,_A,_I,_N,__,_C,_O,_M,_E,__,_T,_O,__,_T,_H,_E,__,_W,_O,_R,_L,_D
 	.BYTE $FF
 String_JackWillBeHonored:
-	.WORD	$66		 
+	.WORD	$66
 	.BYTE _J,_A,_C,_K,__,_W,_I,_L,_L,__,_B,_E,__,_H,_O,_N,_O,_R,_E,_D
 	.BYTE $FF
 String_ForeverAsTheHeroWho:
-	.WORD  $A5		 
+	.WORD  $A5
 	.BYTE _F,_O,_R,_E,_V,_E,_R,__,_A,_S,__,_T,_H,_E,__,_H,_E,_R,_O,__,_W,_H,_O
 	.BYTE $FF
 String_RescuedTheKingAndQueen:
-	.WORD  $E3		 
+	.WORD  $E3
 	.BYTE _R,_E,_S,_C,_U,_E,_D,__,_T,_H,_E,__,_K,_I,_N,_G,__,_A,_N,_D,__,_Q,_U,_E,_E,_N
 	.BYTE $FF
 String_JackAndThePrincessGot:
-	.WORD  $63			 
+	.WORD  $63
 	.BYTE _J,_A,_C,_K,__,_A,_N,_D,__,_T,_H,_E,__,_P,_R,_I,_N,_C,_E,_S,_S,__,_G,_O,_T
 	.BYTE $FF
 String_MarriedAndABabyWasBorn:
-	.WORD  $A2		 
+	.WORD  $A2
 	.BYTE _M,_A,_R,_R,_I,_E,_D,__,_A,_N,_D,__,_A,__,_B,_A,_B,_Y,__,_W,_A,_S,__,_B,_O,_R,_N
 	.BYTE $FF
 String_HeIsDestinedToFight:
-	.WORD  $E5		 
+	.WORD  $E5
 	.BYTE _H,_E,__,_I,_S,__,_D,_E,_S,_T,_I,_N,_E,_D,__,_T,_O,__,_F,_I,_G,_H,_T
 	.BYTE $FF
 String_ForWorldPeaceSomeDay:
-	.WORD $124				
+	.WORD $124
 	.BYTE _F,_O,_R,__,_W,_O,_R,_L,_D,__,_P,_E,_A,_C,_E,__,_S,_O,_M,_E,__,_D,_A,_Y
 	.BYTE $FF
 String_KingPameraWasMovedTo:
-	.WORD  $64				
+	.WORD  $64
 	.BYTE _K,_I,_N,_G,__,_P,_A,_M,_E,_R,_A,__,_W,_A,_S,__,_M,_O,_V,_E,_D,__,_T,_O
 	.BYTE $FF
 String_TearsWithPleasure:
-	.WORD	$A6		 
+	.WORD	$A6
 	.BYTE _T,_E,_A,_R,_S,__,_W,_I,_T,_H,__,_P,_L,_E,_A,_S,_U,_R,_E
 	.BYTE $FF
 String_SeeingItJackFoundOut:
-	.WORD  $E3				
+	.WORD  $E3
 	.BYTE _S,_E,_E,_I,_N,_G,__,_I,_T,_cma,__,__,_J,_A,_C,_K,__,_F,_O,_U,_N,_D,__,_O,_U,_T
 	.BYTE $FF
 String_AndShoutedFather:
-	.WORD $126		 
+	.WORD $126
 	.BYTE _A,_N,_D,__,_S,_H,_O,_U,_T,_E,_D,__,_ap,_F,_A,_T,_H,_E,_R,_ap
 	.BYTE $FF
 SpriteAttributeTable:
-	.BYTE    0			 
+	.BYTE    0
 	.BYTE  $27				; 1 ; maybe related to ending pyramid explosion?
 	.BYTE  $55				; 2
 	.BYTE  $8D				; 3
@@ -507,7 +507,7 @@ SpriteAttributeTable:
 	.BYTE  $FF				; 6
 	.BYTE  $D8				; 7
 TileAttributeTable:
-	.BYTE %01010101	 
+	.BYTE %01010101
 	.BYTE %01010101			; 1
 	.BYTE %01010101			; 2
 	.BYTE %01010101			; 3
@@ -548,7 +548,7 @@ TileAttributeTable:
 	.BYTE %00000000			; $26
 	.BYTE %00000000			; $27
 SectionRoomsTable:
-	.WORD	Section_1_1	 
+	.WORD	Section_1_1
 	.WORD Section_2_1			; 1 ; 42 entries, seems	to be
 	.WORD Section_3_1			; 2 ; based on which rooms are
 	.WORD Section_4_1			; 3 ; "in the same section"
@@ -595,21 +595,21 @@ Section_1_1:
 Section_2_1:
 	.BYTE    7, 8,   9,  $A,	$B, $A8,   0
 Section_3_1:
-	.BYTE   $C, $D,  $E,  $F, $A9,   0	
+	.BYTE   $C, $D,  $E,  $F, $A9,   0
 Section_4_1:
-	.BYTE  $10,	$11,   0		
+	.BYTE  $10,	$11,   0
 Section_4_2:
 	.BYTE  $12,	$13, $14, $15, $16, $17, $AA, $AC,   0
 Section_4_3:
 	.BYTE  $18,	$19, $1A, $1B, $1C, $FA, $FB,	0
 Section_4_4:
-	.BYTE  $1D,	$1E,   0		
+	.BYTE  $1D,	$1E,   0
 Section_4_5:
-	.BYTE  $1F,	$20, $21,   0		
+	.BYTE  $1F,	$20, $21,   0
 Section_4_6:
-	.BYTE  $22,	$23, $24, $AD, $AE,   0	
+	.BYTE  $22,	$23, $24, $AD, $AE,   0
 Section_4_7:
-	.BYTE  $25,	$26, $27,   0		
+	.BYTE  $25,	$26, $27,   0
 Section_5_1:
 	.BYTE  $28,	$29, $2A, $2B, $2C, $2D, $AF, $B1,   0
 Section_5_2:
@@ -617,21 +617,21 @@ Section_5_2:
 Section_6_1:
 	.BYTE  $33,	$34, $35, $36, $37, $38, $39, $B3,   0
 Section_6_2:
-	.BYTE  $3A,	$3B,   0		
+	.BYTE  $3A,	$3B,   0
 Section_7_1:
-	.BYTE  $3C,	$3D,   0		
+	.BYTE  $3C,	$3D,   0
 Section_7_2:
-	.BYTE  $3E,	$3F, $40, $41, 0	
+	.BYTE  $3E,	$3F, $40, $41, 0
 Section_7_3:
-	.BYTE  $42,	$43, $44,   0		
+	.BYTE  $42,	$43, $44,   0
 Section_8_1:
 	.BYTE  $45,	$46, $47, $48, $49, $B6,   0
 Section_8_2:
-	.BYTE  $4A,	$4B,   0		
+	.BYTE  $4A,	$4B,   0
 Section_9_1:
-	.BYTE  $4C,	$4D,   0		
+	.BYTE  $4C,	$4D,   0
 Section_9_2:
-	.BYTE  $4E,	$4F, $50, $51, $52,   0	
+	.BYTE  $4E,	$4F, $50, $51, $52,   0
 Section_9_3:
 	.BYTE  $53,	$54, $55, $56, $57, $58, $59, $5A,   0
 Section_10_1:
@@ -639,43 +639,43 @@ Section_10_1:
 Section_11_1:
 	.BYTE  $61, $62, $63, $64,	$65, $B4, $B5, 0
 Section_11_2:
-	.BYTE  $66, $67, $68, $BA, 0 
+	.BYTE  $66, $67, $68, $BA, 0
 Section_11_3:
-	.BYTE  $69, $6A,	0	 
+	.BYTE  $69, $6A,	0
 Section_12_1:
 	.BYTE  $6B, $6C, $6D, $6E,	$E7, $E3, $ED, $F4,   0; Includes several rooms of the	"labyrinth"
 Section_13_1:
-	.BYTE  $6F, $70, $BB, $BC,	$AB,   0 
+	.BYTE  $6F, $70, $BB, $BC,	$AB,   0
 Section_13_2:
-	.BYTE  $71, $72,	0	 
+	.BYTE  $71, $72,	0
 Section_13_3:
-	.BYTE  $73, $74, $75, $76, 0 
+	.BYTE  $73, $74, $75, $76, 0
 Section_13_4:
 	.BYTE  $77, $78, $79, $7A,	$7B, $7C, $7D, 0
 Section_14_1:
-	.BYTE  $7E, $7F,	0	 
+	.BYTE  $7E, $7F,	0
 Section_14_2:
-	.BYTE  $80, $81, $82, $BD, 0 
+	.BYTE  $80, $81, $82, $BD, 0
 Section_15_1:
-	.BYTE  $83, $84, $85, $86, 0 
+	.BYTE  $83, $84, $85, $86, 0
 Section_16_1:
-	.BYTE  $87, $88, $BE,   0	 
+	.BYTE  $87, $88, $BE,   0
 Section_16_2:
 	.BYTE  $89, $8A, $8B, $8C,	$8D, $B0,   0
 Section_17_1:
-	.BYTE  $8E, $8F, $BF,   0	 
+	.BYTE  $8E, $8F, $BF,   0
 Section_7_4:
 	.BYTE  $C0,	$C1, $C2, $C3, $C4,   0	; Crystal ball side path
 Section_7_5:
-	.BYTE  $C5,	$C6, $C7,   0		
+	.BYTE  $C5,	$C6, $C7,   0
 Section_7_6:
-	.BYTE  $C8,	$C9,   0		
+	.BYTE  $C8,	$C9,   0
 Section_7_7:
 	.BYTE  $CA,	$CB, $CC, $CD, $B7, $B8,   0
 Section_5_3:
 	.BYTE  $FE,	$FF,   0		; Secret 5-2 ->	11-3 warp
 FireBombBonus:
-	.BYTE  $10		 
+	.BYTE  $10
 	.BYTE  $20				; 1 ; $10, $20,	$30, $50 (thousand)
 	.BYTE  $30				; 2
 	.BYTE  $50				; 3
@@ -721,7 +721,7 @@ ScoreAddTable:
 	ScoreValue    1,  $80 ;		; $1D ;	1C:   6000
 					; 1D:	8000
 ItemToTileTable:
-	.BYTE  $4D		 
+	.BYTE  $4D
 	.BYTE  $4E				; 1 ; 00 4D   100 pt bag
 	.BYTE  $4F				; 2 ; 01 4E   300 pt bag
 	.BYTE  $47				; 3 ; 02 4F  1000 pt bag
@@ -754,7 +754,7 @@ ItemToTileTable:
 	.BYTE    0				; $1E
 	.BYTE    0				; $1F
 RoomHalfScreens:
-	.BYTE 0,   1		 
+	.BYTE 0,   1
 	.BYTE  $34,	$22			; 2
 	.BYTE  $35,	$23			; 4
 	.BYTE  $36,	$24			; 6
@@ -1359,7 +1359,7 @@ LayoutChunks:
 	.BYTE  $5E,	$5E, $5E, $5E, $5E, $5E, $5E, $5E; $6B0
 	.BYTE  $3B,	$2F, $2F, $2F, $3B, $2F, $2D, $2D; $6B8
 MetatileDefinitions:
-	.BYTE  $24,	$24, $24, $24		
+	.BYTE  $24,	$24, $24, $24
 	.BYTE  $45,	$50, $47, $47		; 4 ; 612 ($264) entries
 	.BYTE  $24,	$24, $24, $46		; 8 ; 153 ( $99) tiles
 	.BYTE  $24,	$24, $53, $24		; $C
@@ -1513,7 +1513,7 @@ MetatileDefinitions:
 	.BYTE  $38,	$38, $39, $39		; $25C
 	.BYTE  $39,	$39, $38, $38		; $260
 AdjacentRoomsTable:
-	.BYTE    1, 0,   0,   0,	0      
+	.BYTE    1, 0,   0,   0,	0
 	.BYTE   $E, 0,   0,   2, 0	; 5 ; flag, up,	down, right, left
 	.BYTE    4, 0,   0,   3, 1	; $A ;
 	.BYTE    4, 0,   0,   4, 2	; $F ; flag:
@@ -1770,7 +1770,7 @@ AdjacentRoomsTable:
 	.BYTE    2,	$FF, $FD,   0, 0	; $4F6
 	.BYTE   $A,	$6A, $FE,   0, 0	; $4FB
 EnemySpawnPositionTable:
-	.BYTE	0,  0		 
+	.BYTE	0,  0
 	.BYTE   0,	0			; 2
 	.BYTE $B1,$4A			; 4
 	.BYTE $44,$2B			; 6
@@ -2308,7 +2308,7 @@ RoomData_4E:
 	.BYTE  $E8, 5, $95, $86, 0,   6, $43, $63
 	.BYTE  $83,	$59, $39, $19, $FF	; 8
 RoomData_51_VertOutside:
-	.BYTE 4, $A7, $AB, $2D, $29,	$FF 
+	.BYTE 4, $A7, $AB, $2D, $29,	$FF
 RoomData_52:
 	.BYTE  $82, 1,   6, $A7, $A5, $A3, $29, $2B
 	.BYTE  $2D,	$FF			; 8
@@ -2345,12 +2345,12 @@ RoomData_61:
 	.BYTE  $E6,	$F8, $98, $8E, 0, $86, $FC, $A8
 	.BYTE  $77,	$10, $67, $18, $AE, $FF	; 8
 RoomData_62:
-	.BYTE  $13,	$44, $20, $6C, $FF	
+	.BYTE  $13,	$44, $20, $6C, $FF
 RoomData_63:
 	.BYTE  $E6, 1,   0, $86, $5C, $94, $47, $15
 	.BYTE  $C3,	$20, $AE, $FF		; 8
 RoomData_64:
-	.BYTE  $36,	$6C,  $B, $FF		
+	.BYTE  $36,	$6C,  $B, $FF
 RoomData_65:
 	.BYTE  $8A, 1, $99, $34, $18, $CC, $FF
 RoomData_66:
@@ -2625,7 +2625,7 @@ RoomData_AB:
 	.BYTE  $C2,	$11, $C3, $13, $B1, $11, $B2, $10; $10
 	.BYTE  $A1,	$FF			; $18
 RoomData_AC:
-	.BYTE  $E6, 7,   0, $80, 7, $FF	
+	.BYTE  $E6, 7,   0, $80, 7, $FF
 RoomData_AD:
 	.BYTE  $E0, 3,   0, $87, 1, $9B, $5D,	3
 	.BYTE  $6A,	$68, $66, $10, $1A, $10, $47, $11; 8
@@ -2791,12 +2791,12 @@ RoomData_D7:
 	.BYTE  $E5, 4,   0, $8D, 1, $89,   1,	5
 	.BYTE  $3B,	$39, $37, $35, $33, $FF	; 8
 RoomData_D8:
-	.BYTE  $E4, 4,   0, $84, 1, $FF	
+	.BYTE  $E4, 4,   0, $84, 1, $FF
 RoomData_D9:
 	.BYTE  $E5, 4,   0, $80, 1, $84,   1,	4
 	.BYTE  $B4,	$44, $4B, $BB, $FF	; 8
 RoomData_DA:
-	.BYTE  $E4, 4,   0, $80, 1, $FF	
+	.BYTE  $E4, 4,   0, $80, 1, $FF
 RoomData_DB:
 	.BYTE  $E5, 4,   0, $8E, 1, $89,   1,	4
 	.BYTE  $AA,	$88, $66, $44, $10, $D3, $20, $D9; 8
@@ -2807,7 +2807,7 @@ RoomData_DD:
 	.BYTE  $E5, 4,   0, $80, 1, $8D,   1, $11
 	.BYTE  $D8,	$11, $DB, $11, $DE, $FF	; 8
 RoomData_DE:
-	.BYTE  $E4, 4,   0, $85, 1, $FF	
+	.BYTE  $E4, 4,   0, $85, 1, $FF
 RoomData_DF:
 	.BYTE  $E5, 4,   0, $81, 1, $89,   1, $35
 	.BYTE  $D1,	$33, $D3, $32, $D5, $FF	; 8
@@ -2831,7 +2831,7 @@ RoomData_E5:
 	.BYTE    1,	$10, $64, $11, $6B, $11, $D6, $10; 8
 	.BYTE  $D9,	$FF			; $10
 RoomData_E6:
-	.BYTE  $E4, 4,   0, $85, 1, $FF	
+	.BYTE  $E4, 4,   0, $85, 1, $FF
 RoomData_E7:
 	.BYTE  $E5, 4,   0, $8E, 1, $85, $E6, $81
 	.BYTE    1,	$10, $55, $11, $59, $18, $83, $12; 8
@@ -2842,7 +2842,7 @@ RoomData_E9:
 	.BYTE  $E5, 4,   0, $8A, 1, $84,   1,	6
 	.BYTE  $4B,	$8B, $CB, $44, $84, $C4, $FF; 8
 RoomData_EA:
-	.BYTE  $E5, 4,   0, $80, 1, $FF	
+	.BYTE  $E5, 4,   0, $80, 1, $FF
 RoomData_EB:
 	.BYTE  $E5, 4,   0, $8E, 1, $84,   1, $10
 	.BYTE  $57,	$11, $77, $10, $97, $11, $B7, $10; 8
@@ -2854,13 +2854,13 @@ RoomData_ED:
 	.BYTE  $D4,	$18, $D6, $1B, $D8, $15, $DA, $14; 8
 	.BYTE  $DC,	$10, $DE, $FF		; $10
 RoomData_EE:
-	.BYTE  $E4, 4,   0, $85, 1, $FF	
+	.BYTE  $E4, 4,   0, $85, 1, $FF
 RoomData_EF:
 	.BYTE  $E5, 4,   0, $8E, 1, $81,   1, $89
 	.BYTE    1,	$10, $64, $10, $6B, $20, $D6, $11; 8
 	.BYTE  $D9,	$FF			; $10
 RoomData_F0:
-	.BYTE  $E5, 4,   0, $89, 1, $FF	
+	.BYTE  $E5, 4,   0, $89, 1, $FF
 RoomData_F1:
 	.BYTE  $E5, 4,   0, $8A, 1, $85,   1,	6
 	.BYTE  $4B,	$8B, $CB, $44, $84, $C4, $FF; 8
@@ -2889,7 +2889,7 @@ RoomData_F8:
 	.BYTE  $E4, 4,   0, $8D, 1, $85,   1,	6
 	.BYTE  $4B,	$8B, $CB, $44, $84, $C4, $FF; 8
 RoomData_F9:
-	.BYTE  $E4, 4,   0, $81, 1, $FF	
+	.BYTE  $E4, 4,   0, $81, 1, $FF
 RoomData_FA:
 	.BYTE  $E2, 3,   0, $87, 1, $11, $3D, $10
 	.BYTE  $8D,	$10, $63, $FF		; 8
@@ -2911,7 +2911,7 @@ RoomData_FF:
 	.BYTE  $83, 1,   5, $9A, $98, $42, $62, $82
 	.BYTE  $12,	$9D, $FF		; 8
 RoomDataPointers:
-	.WORD RoomData_01	 
+	.WORD RoomData_01
 	.WORD RoomData_02			; 1 ; 1-indexed	table;
 	.WORD RoomData_03			; 2 ; the title	screen (room 00)
 	.WORD RoomData_04			; 3 ; does not have any	objects
