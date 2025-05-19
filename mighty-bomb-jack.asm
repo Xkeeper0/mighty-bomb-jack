@@ -2,16 +2,39 @@
 ; Mighty Bomb Jack disassembly
 ; -----------------------------------------
 
+; ------------------------------
+; Build settings
+END_OF_ROM_PADDING		= $FF		; Padding used for empty space
+; Use the weaker version of the copyright check:
+; see https://www.nesdev.org/wiki/CNROM#Mapper_185
+WEAK_COPYRIGHT_CHECK	= 1
+
+; NES mapper used
+NES_MAPPER_NUM			= 185	; CNROM (spicy)
+CHR_ROM_BANKS			= 1
+
+
+IFDEF REV_A
+	END_OF_ROM_PADDING		= $00
+	WEAK_COPYRIGHT_CHECK	= 0
+ENDIF
+IFDEF REV_US
+	END_OF_ROM_PADDING		= $FF
+	WEAK_COPYRIGHT_CHECK	= 0
+	NES_MAPPER_NUM			= 3	; CNROM
+	CHR_ROM_BANKS			= 4
+	USE_MORE_ZP equ 1
+ENDIF
+
+
+
 ; -----------------------------------------
 ; Add iNES header
 
-	.db "NES", $1a	; iNES header
-	.db 2			; 16KB PRG-ROM pages
-	.db 1			; 8KB CHR-ROM pages
-	.db $90
-	.db $B0
-	.dsb 8, $00		; Reserved
-
+	INESPRG 2				; 2 x 16KB PRG pages
+	INESCHR CHR_ROM_BANKS	; # x 8KB CHR-ROM pages
+	INESMAP NES_MAPPER_NUM	; Mapper number
+	INESMIR 0				; Horizontal
 
 ; -----------------------------------------
 ; Add macros
@@ -42,4 +65,8 @@
 
 ; -----------------------------------------
 ; Include CHR-ROM
-.incbin "src/mbj-jp.chr"
+IFDEF REV_US
+	.incbin "src/mbj-us.chr"
+ELSE
+	.incbin "src/mbj-jp.chr"
+ENDIF

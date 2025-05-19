@@ -57,3 +57,7 @@ MACRO SndJmpF3 target
 	.db $F3
 	.dw target
 ENDM SndJmp
+
+
+; Compatibility :(
+.include "src/compatibility.asm"

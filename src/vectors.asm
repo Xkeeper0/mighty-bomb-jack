@@ -1,8 +1,6 @@
-IFDEF REV_A
-    PAD $FFFA,$00
-ELSE
-    PAD $FFFA,$FF
-ENDIF
+
+    PAD $FFFA, END_OF_ROM_PADDING
+
 
     .dw NMI
     .dw RESET
