@@ -1,5 +1,5 @@
 IFDEF REV_US
-	PAD $F39E, $00
+;	PAD $F39E, $00
 ENDIF
 
 NoteLengthTable:

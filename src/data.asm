@@ -115,23 +115,61 @@ EnemyInitialStatus:
 	.BYTE %10001			; $E
 	.BYTE %10001			; $F
 	.BYTE %10101			; $10
+
+
 DifficultyTable:
-	.BYTE 0, $A0, $80, $40
-	.BYTE    1,	$80, $70, $38		; 4 ; based on last bomb room
-	.BYTE    1,	$70, $60, $30		; 8 ; (i.e. last "stage	x cleared")
-	.BYTE    2,	$60, $50, $28		; $C ;
-	.BYTE    2,	$58, $40, $20		; $10 ;	first byte: enemy speed
-	.BYTE    3,	$50, $30, $18		; $14 ;	second byte: spawn timer
-	.BYTE    3,	$48, $20, $10		; $18 ;	third/fourth: transform	timer
-	.BYTE    4,	$40, $10,   8		; $1C ;
-	.BYTE    4,	$40,   8,   8		; $20 ;	round 1/2 use 1st line,
-	.BYTE    5,	$40,   8,   8		; $24 ;	round 3	uses 2nd line,
-	.BYTE    1,	$30,   8,   8		; $28 ;	round 4	uses 3rd line, ...
-	.BYTE    5,	$40,   8,   8		; $2C ;
-	.BYTE    6,	$40,   8,   8		; $30 ;	the second transform timer
-	.BYTE    6,	$40,   8,   8		; $34 ;	is used	in royal palace
-	.BYTE    7,	$40,   8,   8		; $38 ;	(aka bomb) rooms
-	.BYTE    2,	$40,   8,   8		; $3C
+; based on last bomb room
+; (i.e. last "stage	x cleared")
+;
+;	first byte: enemy speed
+;	second byte: spawn timer
+;	third/fourth: transform	timer
+;
+;	round 1/2 use 1st line,
+;	round 3	uses 2nd line,
+;	round 4	uses 3rd line, ...
+;
+;	the second transform timer
+;	is used	in royal palace
+;	(aka bomb) rooms
+IFDEF REV_US
+	;        TF timer....in bomb rooms
+	;   Spawn Rt    |    |
+	;  Speed   |    |    |   Round  Regional Chg's
+	.BYTE  0, $A0, $80, $40 ; 1/2
+	.BYTE  1, $80, $70, $38 ;  3
+	.BYTE  2, $70, $60, $30 ;  4  1→2
+	.BYTE  3, $60, $50, $28 ;  5  2→3
+	.BYTE  4, $58, $40, $20 ;  6  2→4
+	.BYTE  5, $50, $30, $18 ;  7  3→5
+	.BYTE  4, $48, $20, $10 ;  8  3→4
+	.BYTE  5, $30, $10,   4 ;  9  4→5  40→30  8→4
+	.BYTE  5, $40,   8,   8 ; 10  4→5
+	.BYTE  6, $40,   8,   8 ; 11  5→6
+	.BYTE  3, $30,   8,   8 ; 12  1→3
+	.BYTE  5, $30,   8,   6 ; 13       40→30  8→6
+	.BYTE  6, $40,   8,   8 ; 14
+	.BYTE  7, $40,   8,   8 ; 15  6→7
+	.BYTE  7, $40,   8,   8 ; 16
+	.BYTE  3, $40,   8,   8 ; Fin 2→3
+ELSE
+	.BYTE  0, $A0, $80, $40 ; 1/2
+	.BYTE  1, $80, $70, $38 ;  3
+	.BYTE  1, $70, $60, $30 ;  4
+	.BYTE  2, $60, $50, $28 ;  5
+	.BYTE  2, $58, $40, $20 ;  6
+	.BYTE  3, $50, $30, $18 ;  7
+	.BYTE  3, $48, $20, $10 ;  8
+	.BYTE  4, $40, $10,   8 ;  9
+	.BYTE  4, $40,   8,   8 ; 10
+	.BYTE  5, $40,   8,   8 ; 11
+	.BYTE  1, $30,   8,   8 ; 12
+	.BYTE  5, $40,   8,   8 ; 13
+	.BYTE  6, $40,   8,   8 ; 14
+	.BYTE  6, $40,   8,   8 ; 15
+	.BYTE  7, $40,   8,   8 ; 16
+	.BYTE  2, $40,   8,   8 ; Final
+ENDIF
 byte_C0CB:
 	.BYTE $4C
 	.BYTE  $48				; 1
@@ -365,24 +403,25 @@ SpritesTable:
 	.BYTE    0,	$A4, $A5, $A6, $A7	; $D7
 	.BYTE    0,	$B0, $B1, $B2, $B3	; $DC
 	.BYTE    0,	$B4, $B5, $B6, $B7	; $E1
-StringPointerTable:
-	.WORD String_PushStartButton
-	.WORD String_GameOver		; 1
-	.WORD String_TimeOver		; 2
-	.WORD String_YouAreGreedy		; 3
-	.WORD String_GoToTheTortureRoom	; 4
-	.WORD String_Round_Clear		; 5
-	.WORD String_TimeBonus		; 6
-	.WORD String_YouveGotten		; 7
-	.WORD String_FireBombs		; 8
-	.WORD String_SpecialBonus		; 9
-	.WORD String_YourGDV		; $A
-	.WORD String_C_Tecmo		; $B
-	.WORD String_HighGDV		; $C
+
+	StringPointerTable:
+	.WORD String_PushStartButton		; 0
+	.WORD String_GameOver				; 1
+	.WORD String_TimeOver				; 2
+	.WORD String_YouAreGreedy			; 3
+	.WORD String_GoToTheTortureRoom		; 4
+	.WORD String_Round_Clear			; 5
+	.WORD String_TimeBonus				; 6
+	.WORD String_YouveGotten			; 7
+	.WORD String_FireBombs				; 8
+	.WORD String_SpecialBonus			; 9
+	.WORD String_YourGDV				; $A
+	.WORD String_C_Tecmo				; $B
+	.WORD String_HighGDV				; $C
 	.WORD String_TheCurseOfBelzebutHas	; $D
 	.WORD String_BeenSolvedAndPeaceHas	; $E
 	.WORD String_AgainComeToTheWorld	; $F
-	.WORD String_JackWillBeHonored	; $10
+	.WORD String_JackWillBeHonored		; $10
 	.WORD String_ForeverAsTheHeroWho	; $11
 	.WORD String_RescuedTheKingAndQueen	; $12
 	.WORD String_JackAndThePrincessGot	; $13
@@ -390,9 +429,17 @@ StringPointerTable:
 	.WORD String_HeIsDestinedToFight	; $15
 	.WORD String_ForWorldPeaceSomeDay	; $16
 	.WORD String_KingPameraWasMovedTo	; $17
-	.WORD String_TearsWithPleasure	; $18
+	.WORD String_TearsWithPleasure		; $18
 	.WORD String_SeeingItJackFoundOut	; $19
-	.WORD String_AndShoutedFather	; $1A
+	.WORD String_AndShoutedFather		; $1A
+IFDEF REV_US
+	.WORD String_TM						; $1B
+	.WORD String_MightyBombJackTM		; $1C
+	.WORD String_TMAndC_TecmoLTD		; $1D
+	.WORD String_LicensedBy				; $1E
+	.WORD String_NintendoOfAmerica		; $1F
+ENDIF
+
 String_PushStartButton:
 	.WORD $1C8
 	.BYTE _P,_U,_S,_H,__,_S,_T,_A,_R,_T,__,_B,_U,_T,_T,_O,_N
@@ -440,6 +487,9 @@ String_YourGDV:
 String_C_Tecmo:
 	.WORD $213
 	.BYTE _cp,__,_T,_E,_C,_M,_O
+IFDEF REV_US
+	.BYTE _cma,_L,_T,_D,$61
+ENDIF
 	.BYTE $FF
 String_HighGDV:
 	.WORD  $56
@@ -501,6 +551,28 @@ String_AndShoutedFather:
 	.WORD $126
 	.BYTE _A,_N,_D,__,_S,_H,_O,_U,_T,_E,_D,__,_ap,_F,_A,_T,_H,_E,_R,_ap
 	.BYTE $FF
+IFDEF REV_US
+String_TM:
+	.WORD $19E
+	.BYTE $DC,$DD
+	.BYTE $FF
+String_MightyBombJackTM:
+	.WORD $106
+	.BYTE _M,_I,_G,_H,_T,_Y,__,_B,_O,_M,_B,__,_J,_A,_C,_K,__,$DC,$DD
+	.BYTE $FF
+String_TMAndC_TecmoLTD:
+	.WORD $184
+	.BYTE _T,_M,__,_A,_N,_D,__,_cp,__,__,__,__,__,__,_T,_E,_C,_M,_O,_cma,_L,_T,_D,$61
+	.BYTE $FF
+String_LicensedBy:
+	.WORD $1CA
+	.BYTE _L,_I,_C,_E,_N,_S,_E,_D,__,_B,_Y
+	.BYTE $FF
+String_NintendoOfAmerica:
+	.WORD $204
+	.BYTE _N,_I,_N,_T,_E,_N,_D,_O,__,_O,_F,__,_A,_M,_E,_R,_I,_C,_A,__,_I,_N,_C,$61
+	.BYTE $FF
+ENDIF
 SpriteAttributeTable:
 	.BYTE    0
 	.BYTE  $27				; 1 ; maybe related to ending pyramid explosion?
@@ -693,37 +765,40 @@ MultipliedScoreTable:
 	.BYTE   Score_2400, Score_3600,  Score_4800,  Score_6000; $18
 	.BYTE   Score_4000, Score_6000,  Score_8000, Score_10000; $1C
 ScoreAddTable:
-	ScoreValue    0, $10 ;	 ;	DATA XREF: AddScore+24r
-	ScoreValue    1, 1 ;		; 1 ; 00:     10
-	ScoreValue    1, 2 ;		; 2 ; 01:    100
-	ScoreValue    1, 3 ;		; 3 ; 02:    200
-	ScoreValue    1, 5 ;		; 4 ; 03:    300
-	ScoreValue    1, 8 ;		; 5 ; 04:    500
-	ScoreValue    1,  $12 ;		; 6 ; 05:    800  *
-	ScoreValue    1,  $20 ;		; 7 ; 06:   1200
-	ScoreValue    1,  $10 ;		; 8 ; 07:   2000
-	ScoreValue    2, 1 ;		; 9 ; 08:   1000
-	ScoreValue    2,  $10 ;		; $A ; 09:  10000
-	ScoreValue    2, 5 ;		; $B ; 0A: 100000
-	ScoreValue    0,  $20 ;		; $C ; %0:  50000
-	ScoreValue    0,  $30 ;		; $D ; 0C:     20
-	ScoreValue    0,  $40 ;		; $E ; 0D:     30
-	ScoreValue    0,  $50 ;		; $F ; 0E:     40
-	ScoreValue    1, 4 ;		; $10 ;	0F:	50
-	ScoreValue    1, 6 ;		; $11 ;	10:    400
-	ScoreValue    1, 8 ;		; $12 ;	11:    600
-	ScoreValue    1, 9 ;		; $13 ;	12:    800 (POI: dupe)
-	ScoreValue    1,  $15 ;		; $14 ;	13:    900
-	ScoreValue    1,  $25 ;		; $15 ;	14:   1500
-	ScoreValue    1,  $16 ;		; $16 ;	15:   2500
-	ScoreValue    1,  $24 ;		; $17 ;	16:   1600
-	ScoreValue    1,  $32 ;		; $18 ;	17:   2400
-	ScoreValue    1,  $40 ;		; $19 ;	18:   3200
-	ScoreValue    1,  $36 ;		; $1A ;	19:   4000
-	ScoreValue    1,  $48 ;		; $1B ;	1A:   3600
-	ScoreValue    1,  $60 ;		; $1C ;	%1:   4800
-	ScoreValue    1,  $80 ;		; $1D ;	1C:   6000
-					; 1D:	8000
+	ScoreValue    0, $10	; 00:     10
+	ScoreValue    1, 1		; 01:    100
+	ScoreValue    1, 2		; 02:    200
+	ScoreValue    1, 3		; 03:    300
+	ScoreValue    1, 5		; 04:    500
+	ScoreValue    1, 8		; 05:    800  *
+	ScoreValue    1,  $12	; 06:   1200
+	ScoreValue    1,  $20	; 07:   2000
+	ScoreValue    1,  $10	; 08:   1000
+	ScoreValue    2, 1		; 09:  10000
+	ScoreValue    2,  $10	; 0A: 100000
+	ScoreValue    2, 5		; %0:  50000
+	ScoreValue    0,  $20	; 0C:     20
+	ScoreValue    0,  $30	; 0D:     30
+	ScoreValue    0,  $40	; 0E:     40
+	ScoreValue    0,  $50	; 0F:     50
+	ScoreValue    1, 4		; 10:    400
+	ScoreValue    1, 6		; 11:    600
+	ScoreValue    1, 8		; 12:    800 (POI: dupe)
+	ScoreValue    1, 9		; 13:    900
+	ScoreValue    1,  $15	; 14:   1500
+	ScoreValue    1,  $25	; 15:   2500
+	ScoreValue    1,  $16	; 16:   1600
+	ScoreValue    1,  $24	; 17:   2400
+	ScoreValue    1,  $32	; 18:   3200
+	ScoreValue    1,  $40	; 19:   4000
+	ScoreValue    1,  $36	; 1A:   3600
+	ScoreValue    1,  $48	; %1:   4800
+	ScoreValue    1,  $60	; 1C:   6000
+	ScoreValue    1,  $80	; 1D:	8000
+IFDEF REV_US
+	ScoreValue    1,  $30	; 1E:   3000
+	ScoreValue    3,    1	; 1F:1000000
+ENDIF
 ItemToTileTable:
 	.BYTE  $4D
 	.BYTE  $4E				; 1 ; 00 4D   100 pt bag
@@ -930,7 +1005,11 @@ RoomHalfScreens:
 	.BYTE   $A,	$69			; $152
 	.BYTE   $A, $B			; $154
 	.BYTE   $A, $B			; $156
+IFDEF REV_US
+	.BYTE   $A, $B			; $158
+ELSE
 	.BYTE    6, 7			; $158
+ENDIF
 	.BYTE  $5A,	$61			; $15A
 	.BYTE  $54,	$63			; $15C
 	.BYTE   $A, $B			; $15E

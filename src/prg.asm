@@ -6771,7 +6771,7 @@ IFDEF REV_US
 	.WORD DoorCond_1D_FBWarp1		; 1D room FB warp door
 	.WORD DoorCond_1E_R5R11Warp		; 1E round 5->11 warp (rm#$FC)
 	.WORD DoorCond_1F_R11WarpBack	; 1F round 11->6 warp (rm#$61)
-	.WORD $0000
+	.WORD DoorCond_20_US			; 20* ? (jp doesn't exist)
 
 
 ELSE
@@ -7436,7 +7436,11 @@ UnknownDoorTable:
 	.BYTE  $1F				; 7
 	.BYTE   $E				; 8
 	.BYTE    3				; 9
+IFDEF REV_US
+	.BYTE  $0F				; $A
+ELSE
 	.BYTE  $1F				; $A
+ENDIF
 	.BYTE  $16				; $B
 	.BYTE  $1E				; $C
 	.BYTE  $17				; $D
@@ -7524,7 +7528,7 @@ TitleScreen_0:
 	LDA #Strings_HighGDV
 	JSR WriteStringToPPU		; high gdv
 IFDEF REV_US
-	LDA #1B						; @TODO string fix
+	LDA #$1B					; @TODO string fix
 	JSR WriteStringToPPU		; high gdv
 ENDIF
 	JSR DrawScore			; draw score sprites?
@@ -7593,21 +7597,22 @@ TitleScreen_1:
 TitleScreen_2:
 	LDA Joypad1_Immediate
 	AND #JP_Start
-	BEQ locret_ADBF
+	BEQ +
 	AND a:Joypad1_ImmediateCopy
 	BEQ loc_ADC0
 IFDEF REV_US
-	DEC TitleScreenTimer
-	BNE locret_ADBF
++	DEC TitleScreenTimer
+	BNE +
 	INC TitleScreenTimer+1
 	LDA TitleScreenTimer+1
 	CMP #2
-	BNE locret_ADBF
+	BNE +
 	LDA #0
 	STA TitleScreenState
 ENDIF
+
 locret_ADBF:
-	RTS
++	RTS
 ; ---------------------------------------------------------------------------
 
 loc_ADC0:
@@ -7941,6 +7946,7 @@ loc_AFB0:
 	ASL A
 	LDY #2
 	STA (EnemyStructPointer),Y
+DoorCond_20_US:
 	TXA
 	LSR byte_0
 	ROR A
@@ -8354,7 +8360,7 @@ loc_B22A:
 	CMP #$B
 	TYA
 	BCC loc_B240
-	LDX a:byte_10
+	LDXc byte_10
 	BPL loc_B23E
 	SBC #4
 ; ---------------------------------------------------------------------------
@@ -8365,7 +8371,7 @@ loc_B23E:
 	ADC #4
 
 loc_B240:
-	DEC a:byte_11
+	DECc byte_11
 	BNE loc_B22A
 	TAX
 
@@ -8507,7 +8513,7 @@ SoundCommand_Ax_Bx:
 ; ?, double returns
 
 SoundCommand_Cx:
-	LDA a:byte_6			; original command byte
+	LDAc byte_6			; original command byte
 	AND #$F
 	LDY #$11
 	STA (SoundEnginePointer),Y	; Y=#$11
