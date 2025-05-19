@@ -1,4 +1,4 @@
 *.lst
 *.log
-asm6f*.exe
-build.bat
+bin/*
+
