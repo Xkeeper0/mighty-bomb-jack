@@ -1,3 +1,6 @@
+
+; Japan/Original Revision room data
+
 RoomData_01:
 	.BYTE  $E0,   0, $81, $8F,   0,   5, $85, $87, $39, $6B, $6D, $10, $C6, $11, $CC, $FF
 RoomData_02:
@@ -155,13 +158,13 @@ RoomData_4D:
 RoomData_4E:
 	.BYTE  $E8,   5, $95, $86,   0,   6, $43, $63, $83, $59, $39, $19, $FF
 RoomData_51_VertOutside:
-	.BYTE 4, $A7, $AB, $2D, $29, $FF
+	.BYTE    4, $A7, $AB, $2D, $29, $FF
 RoomData_52:
 	.BYTE  $82,   1,   6, $A7, $A5, $A3, $29, $2B, $2D, $FF
 RoomData_53:
 	.BYTE  $E8,   5, $96, $86,   0,   6, $43, $63, $83, $59, $39, $19, $FF
 RoomData_54_HorizOutside:
-	.BYTE 6, $57, $77, $97, $5E, $7E, $9E, $FF
+	.BYTE    6, $57, $77, $97, $5E, $7E, $9E, $FF
 RoomData_5A:
 	.BYTE  $88,   1, $94, $69, $94, $C2,   1, $33, $FF
 RoomData_5B:
@@ -417,11 +420,11 @@ RoomData_DE:
 RoomData_DF:
 	.BYTE  $E5,   4,   0, $81,   1, $89,   1, $35, $D1, $33, $D3, $32, $D5, $FF
 RoomData_E0:
-	.BYTE $FF
+	.BYTE  $FF
 RoomData_E1:
 	.BYTE  $E5,   4,   0, $8A,   1, $8D,   1,   5, $BC, $9A, $78, $56, $34, $FF
 RoomData_E2:
-	.BYTE $FF
+	.BYTE  $FF
 RoomData_E3:
 	.BYTE  $E0,   4,   0, $84,   1, $14, $63, $20, $66, $14, $69, $14, $6C, $14, $56, $10, $59, $FF
 RoomData_E4:
@@ -433,7 +436,7 @@ RoomData_E6:
 RoomData_E7:
 	.BYTE  $E5,   4,   0, $8E,   1, $85, $E6, $81,   1, $10, $55, $11, $59, $18, $83, $12, $8B, $13, $B5, $20, $B9, $FF
 RoomData_E8:
-	.BYTE $FF
+	.BYTE  $FF
 RoomData_E9:
 	.BYTE  $E5,   4,   0, $8A,   1, $84,   1,   6, $4B, $8B, $CB, $44, $84, $C4, $FF
 RoomData_EA:
