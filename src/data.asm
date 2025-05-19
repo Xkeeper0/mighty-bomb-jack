@@ -4,6 +4,10 @@
 ; ------------------------------------------
 ; ------------------------------------------
 
+; IFDEF REV_US
+; 	PAD $BEAE, $00
+; ENDIF
+
 SpriteAnimationTable:
 	.WORD SpriteAnimation_0_D_F
 	.WORD SpriteAnimation_1		; 1

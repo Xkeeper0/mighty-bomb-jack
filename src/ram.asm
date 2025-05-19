@@ -203,7 +203,9 @@ EnemyStructPointer:
 	.dsb 1                      ; $0085
 	.dsb 1                      ; $0086
 	.dsb 1                      ; $0087
+CopyrightScreenTimer:
 	.dsb 1                      ; $0088
+TitleScreenTimer:
 	.dsb 1                      ; $0089
 	.dsb 1                      ; $008a
 	.dsb 1                      ; $008b

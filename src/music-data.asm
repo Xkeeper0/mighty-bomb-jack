@@ -1,3 +1,7 @@
+IFDEF REV_US
+	PAD $F39E, $00
+ENDIF
+
 NoteLengthTable:
 	.BYTE	  0			; 0
 	.BYTE	  1			; 1 ; $1F entries

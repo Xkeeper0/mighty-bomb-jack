@@ -6737,44 +6737,84 @@ CheckAndMaybeOpenDoor:
 	LDA MaybeDoorTypeOrSphinx
 	JSR JumpTable
 ; ---------------------------------------------------------------------------
-	.WORD DoorCond_rts			; 00 (unused?)
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_02_JumpedOn		; just jumped
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_XX_Mighty3		; player at mighty level 3
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_09_FBWarp2		; R4->R7 to crystal door reverse path
-	.WORD DoorCond_0A_Timer30		; timer	== 30
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_0C_AllFireBombs	; if ($0F8 & 80)
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_0E_Timer60		; timer	== 60
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_rts			; 11 (unused?)
-	.WORD DoorCond_rts			; 12 (unused?)
-	.WORD DoorCond_rts			; 13 (unused?)
-	.WORD DoorCond_rts			; 14
-	.WORD DoorCond_rts			; 15 (unused?)
-	.WORD DoorCond_rts			; 16 (unused?)
-	.WORD DoorCond_XX_Mighty3		; player at mighty level 3
-	.WORD DoorCond_XX_Mighty3		; player at mighty level 3
-	.WORD DoorCond_19_TensScore30	; tens part of score ==	30
-	.WORD DoorCond_1A_TensScore70	; tens part of score ==	70
-	.WORD DoorCond_XX_Mighty3		; player at mighty level 3
-	.WORD DoorCond_rts			; don't open
-	.WORD DoorCond_1D_FBWarp1		; room FB warp door
-	.WORD DoorCond_1E_R5R11Warp		; round	5->11 warp (rm#$FC)
-	.WORD DoorCond_1F_R11WarpBack	; round	11->6 warp (rm#$61)
-; End of function MaybeHandleDoorOpening
+IFDEF REV_US
+	; US version door table
+	.WORD DoorCond_rts				; 00 00 (unused?)
+	.WORD DoorCond_rts				; 01 don't open
+	.WORD DoorCond_02_JumpedOn		; 02 just jumped
+	.WORD DoorCond_rts				; 03 don't open
+	.WORD DoorCond_rts				; 04 don't open
+	.WORD DoorCond_rts				; 05 don't open
+	.WORD DoorCond_rts				; 06 don't open
+	.WORD DoorCond_XX_Mighty3		; 07 player at mighty level 3
+	.WORD DoorCond_rts				; 08 don't open
+	.WORD DoorCond_09_FBWarp2		; 09 R4->R7 to crystal door reverse path
+	.WORD DoorCond_rts				; 0A* don't open (diff from jp)
+	.WORD DoorCond_rts				; 0B don't open
+	.WORD DoorCond_0C_AllFireBombs	; 0C if (MaybeBombThing $0F8 & 80)
+	.WORD DoorCond_rts				; 0D don't open
+	.WORD DoorCond_XX_Mighty3		; 0E timer == 60
+	.WORD DoorCond_rts				; 0F don't open
+	.WORD DoorCond_rts				; 10 don't open
+	.WORD DoorCond_rts				; 11 (unused?)
+	.WORD DoorCond_rts				; 12 (unused?)
+	.WORD DoorCond_rts				; 13 (unused?)
+	.WORD DoorCond_rts				; 14
+	.WORD DoorCond_rts				; 15 (unused?)
+	.WORD DoorCond_rts				; 16 (unused?)
+	.WORD DoorCond_XX_Mighty3		; 17 player at mighty level 3
+	.WORD DoorCond_XX_Mighty3		; 18 player at mighty level 3
+	.WORD DoorCond_1D_FBWarp1		; 19* room FB warp door (diff from jp)
+	.WORD DoorCond_1A_US_rts		; 1A* rts?
+	.WORD DoorCond_XX_Mighty3		; 1B player at mighty level 3
+	.WORD DoorCond_rts				; 1C don't open
+	.WORD DoorCond_1D_FBWarp1		; 1D room FB warp door
+	.WORD DoorCond_1E_R5R11Warp		; 1E round 5->11 warp (rm#$FC)
+	.WORD DoorCond_1F_R11WarpBack	; 1F round 11->6 warp (rm#$61)
+	.WORD $0000
+
+
+ELSE
+	; JP version door table
+	.WORD DoorCond_rts				; 00 00 (unused?)
+	.WORD DoorCond_rts				; 01 don't open
+	.WORD DoorCond_02_JumpedOn		; 02 just jumped
+	.WORD DoorCond_rts				; 03 don't open
+	.WORD DoorCond_rts				; 04 don't open
+	.WORD DoorCond_rts				; 05 don't open
+	.WORD DoorCond_rts				; 06 don't open
+	.WORD DoorCond_XX_Mighty3		; 07 player at mighty level 3
+	.WORD DoorCond_rts				; 08 don't open
+	.WORD DoorCond_09_FBWarp2		; 09 R4->R7 to crystal door reverse path
+	.WORD DoorCond_0A_Timer30		; 0A timer == 30
+	.WORD DoorCond_rts				; 0B don't open
+	.WORD DoorCond_0C_AllFireBombs	; 0C if (MaybeBombThing $0F8 & 80)
+	.WORD DoorCond_rts				; 0D don't open
+	.WORD DoorCond_0E_Timer60		; 0E timer == 60
+	.WORD DoorCond_rts				; 0F don't open
+	.WORD DoorCond_rts				; 10 don't open
+	.WORD DoorCond_rts				; 11 (unused?)
+	.WORD DoorCond_rts				; 12 (unused?)
+	.WORD DoorCond_rts				; 13 (unused?)
+	.WORD DoorCond_rts				; 14
+	.WORD DoorCond_rts				; 15 (unused?)
+	.WORD DoorCond_rts				; 16 (unused?)
+	.WORD DoorCond_XX_Mighty3		; 17 player at mighty level 3
+	.WORD DoorCond_XX_Mighty3		; 18 player at mighty level 3
+	.WORD DoorCond_19_TensScore30	; 19 tens part of score ==	30
+	.WORD DoorCond_1A_TensScore70	; 1A tens part of score ==	70
+	.WORD DoorCond_XX_Mighty3		; 1B player at mighty level 3
+	.WORD DoorCond_rts				; 1C don't open
+	.WORD DoorCond_1D_FBWarp1		; 1D room FB warp door
+	.WORD DoorCond_1E_R5R11Warp		; 1E round 5->11 warp (rm#$FC)
+	.WORD DoorCond_1F_R11WarpBack	; 1F round 11->6 warp (rm#$61)
 
 ; =============== S U B	R O U T	I N E =======================================
-
 DoorCond_unused:
-	LDA a:FireBombsCollected		; POI: unreferenced/unused?
+	LDA a:FireBombsCollected		; POI: unreferenced/unused
+ENDIF
+; End of function MaybeHandleDoorOpening
+
 	CMP #23
 	BCC DoorCond_rts		; don't open
 	JMP HandleOpenDoorMaybe
@@ -6786,7 +6826,7 @@ DoorCond_unused:
 
 DoorCond_02_JumpedOn:
 	JSR MaybeDontOpenDoors		; double-rts sometimes
-	LDA a:JustJumpedFlag
+	LDAc JustJumpedFlag
 	BEQ DoorCond_rts		; don't open
 	JMP HandleOpenDoorMaybe
 ; End of function DoorCond_02_JumpedOn
@@ -6807,10 +6847,9 @@ DoorCond_09_FBWarp2:
 	JMP HandleOpenDoorMaybe
 ; End of function DoorCond_09_FBWarp2
 
+IFNDEF REV_US
 ; =============== S U B	R O U T	I N E =======================================
-
 ; timer	== 30
-
 DoorCond_0A_Timer30:
 	JSR MaybeDontOpenDoors		; double-rts sometimes
 	LDA a:StageTimer
@@ -6818,16 +6857,17 @@ DoorCond_0A_Timer30:
 	BNE DoorCond_rts		; don't open
 	JMP HandleOpenDoorMaybe
 ; End of function DoorCond_0A_Timer30
+ENDIF
 
 ; =============== S U B	R O U T	I N E =======================================
 
 ; if ($0F8 & 80)
 
 DoorCond_0C_AllFireBombs:
-	LDA a:MaybeBombThing		; checks if #$80 set, unsets it
+	LDAc MaybeBombThing		; checks if #$80 set, unsets it
 	BPL DoorCond_rts		; don't open
 	AND #$7F
-	STA a:MaybeBombThing		; maybe	related	to all fire bombs
+	STAc MaybeBombThing		; maybe	related	to all fire bombs
 	JMP HandleOpenDoorMaybe
 ; End of function DoorCond_0C_AllFireBombs
 
@@ -6839,10 +6879,9 @@ DoorCond_rts:
 	RTS
 ; End of function DoorCond_rts
 
+IFNDEF REV_US
 ; =============== S U B	R O U T	I N E =======================================
-
 ; timer	== 60
-
 DoorCond_0E_Timer60:
 	JSR MaybeDontOpenDoors		; double-rts sometimes
 	LDA a:StageTimer
@@ -6850,6 +6889,7 @@ DoorCond_0E_Timer60:
 	BNE DoorCond_rts		; don't open
 	JMP HandleOpenDoorMaybe
 ; End of function DoorCond_0E_Timer60
+ENDIF
 
 ; =============== S U B	R O U T	I N E =======================================
 
@@ -6863,10 +6903,9 @@ DoorCond_XX_Mighty3:
 	JMP HandleOpenDoorMaybe
 ; End of function DoorCond_XX_Mighty3
 
+IFNDEF REV_US
 ; =============== S U B	R O U T	I N E =======================================
-
 ; tens part of score ==	30
-
 DoorCond_19_TensScore30:
 	LDA DoorCheckFlag_19_1A
 	BNE DoorCond_rts		; don't open
@@ -6876,24 +6915,25 @@ DoorCond_19_TensScore30:
 	BNE DoorCond_rts		; don't open
 	JMP HandleOpenDoorMaybe
 ; End of function DoorCond_19_TensScore30
+ENDIF
 
 ; =============== S U B	R O U T	I N E =======================================
 
 ; room FB warp door
 
 DoorCond_1D_FBWarp1:
-	LDA a:RoomStatusFlags		; check	#RF_AtScrollEdge
+	LDAc RoomStatusFlags		; check	#RF_AtScrollEdge
 	AND #RF_AtScrollEdge
 	BEQ locret_AAB3			;   if not, no warp
 	LDA PlayerMightyCoins		; any mighty coins?
 	BNE locret_AAB3			;   if yes, no warp
-	LDA a:StageTimer			; still	have time left?
+	LDAc StageTimer			; still	have time left?
 	BNE locret_AAB3			;   if yes, no warp
 	LDA PlayerSprite		; what sprite does jack	have
 	CMP #6				;   "falling to	the side" sprite?
 	BNE locret_AAB3			;   if not, no warp
 	LDA #0				; otherwise, you pass;
-	STA a:TimerStatusMaybe		; reset	timer to 60 ticks,
+	STAc TimerStatusMaybe		; reset	timer to 60 ticks,
 	LDA #1				; and open the door
 	STA DoorCheckFlag_09		; = #01
 	JMP HandleOpenDoorMaybe
@@ -6939,10 +6979,9 @@ DoorCond_1F_R11WarpBack:
 	BNE HandleOpenDoorMaybe
 ; End of function DoorCond_1F_R11WarpBack
 
+IFNDEF REV_US
 ; =============== S U B	R O U T	I N E =======================================
-
 ; tens part of score ==	70
-
 DoorCond_1A_TensScore70:
 	LDA DoorCheckFlag_19_1A
 	BNE locret_AAB3
@@ -6952,7 +6991,9 @@ DoorCond_1A_TensScore70:
 	BNE locret_AAB3
 	JMP HandleOpenDoorMaybe
 ; ---------------------------------------------------------------------------
+ENDIF
 
+DoorCond_1A_US_rts:
 locret_AAB3:
 	RTS
 ; End of function DoorCond_1A_TensScore70
@@ -6989,6 +7030,14 @@ HandleSphinxEvent:
 	BPL locret_AB18
 
 loc_AACF:
+IFDEF REV_US
+	TXA
+	PHA
+	LDA #Sound_Door
+	JSR QueueSound
+	PLA
+	TAX
+ENDIF
 	LDA #$52
 	STA MaybeSphinxFlags,X		; = #$52
 	LDA UnknownDoorTable,X		; A = table...
@@ -6997,7 +7046,7 @@ loc_AACF:
 	BEQ _DoorTableEntryBelow10	; if no, jump ahead
 	TXA					; restore original value
 	AND #$F				; mask off upper bits
-	STA a:byte_10
+	STAc byte_10
 	LDA CurrentRoomIDBackup4
 	JSR IfNotTitleScreenRoomDoThings ; A=room. double-returns if Z set
 
@@ -7010,20 +7059,24 @@ loc_AAE8:
 	BNE loc_AAE8
 	LDA a:byte_5C
 	AND #$F
-	CMP a:byte_10
+	CMPc byte_10
 	BNE loc_AAE8
 	STA EntryDoorType
 	LDA #$52
-	LDY a:byte_5A
+	LDYc byte_5A
 	DEY
 	STA RoomDataRAM,Y
 	LDA #$B
-	STA a:GameState			; = B
-	BNE locret_AB18
+	STAc GameState			; = B
 
+IFNDEF REV_US
+	BNE locret_AB18
 _DoorTableEntryBelow10:
 	LDA #Sound_Door			; door opens/closes
 	JSR QueueSound			; door
+ELSE
+_DoorTableEntryBelow10:
+ENDIF
 
 locret_AB18:
 	RTS
@@ -7206,27 +7259,27 @@ loc_AC08:
 	LDY #2
 
 loc_AC19:
-	STX a:byte_0
-	STY a:byte_1
+	STXc byte_0
+	STYc byte_1
 	LDA EntryDoorType
 	ASL A
 	ASL A
 	TAY
 	CLC
-	ADC a:byte_0
+	ADCc byte_0
 	TAX
 	LDA DoorPositionTileTable,X
 	PHA
 	LDA DoorPositionTileTable+2,Y
 	CLC
-	ADC a:byte_1
-	ADC a:byte_0
-	STA a:byte_1
+	ADCc byte_1
+	ADCc byte_0
+	STAc byte_1
 	PLA
 	JSR sub_92AD
-	LDA a:byte_1
+	LDAc byte_1
 	JSR sub_9716
-	LDA a:byte_1
+	LDAc byte_1
 	JSR HandleTileAttributes
 	RTS
 ; End of function AnimateDoor
@@ -7254,13 +7307,13 @@ loc_AC5B:
 	LDX CurrentRoomID
 	STA CurrentRoomID
 	LDA #2
-	STA a:GameState			; -> 2 (load room)
+	STAc GameState			; -> 2 (load room)
 	CPX #$90
 	BCC loc_AC8D			; 90 <=	x < A0
 	CPX #$A0
 	BCS loc_AC8D
 	LDA #8
-	STA a:GameState			; -> 8 (round clear)
+	STAc GameState			; -> 8 (round clear)
 	LDA #0
 	STA a:GS8_Status			; not entirely understood but w/e
 	STX LastBombRoomCleared		; used in gdv and difficulty sel
@@ -7293,18 +7346,18 @@ loc_ACAA:
 	BNE loc_ACAA
 	TXA
 	AND #$F
-	STA a:byte_1
+	STAc byte_1
 	LDA EntryDoorType
 	EOR #4
-	CMP a:byte_1
+	CMPc byte_1
 	BEQ loc_ACD0
 	EOR #2
-	CMP a:byte_1
+	CMPc byte_1
 	BNE loc_ACAA
 
 loc_ACD0:
 	STA EntryDoorType
-	LDA a:MaybeCollectedThing
+	LDAc MaybeCollectedThing
 	STA byte_33C
 
 loc_ACD9:
@@ -7368,7 +7421,7 @@ _EndGame:
 
 ; ---------------------------------------------------------------------------
 byte_AD19:
-	.BYTE	%11111100
+	.BYTE %11111100
 	.BYTE %11110011			; 1 ; 1110 1101	1011 0111 (2 nib per #)
 	.BYTE %11001111			; 2
 	.BYTE %00111111			; 3
@@ -7412,7 +7465,11 @@ TitleScreenHandler:
 	LDA a:TitleScreenState		; POI/Revision:	US has additional states here,
 					; related to a new copyright screen added
 	JSR JumpTable
-; ---------------------------------------------------------------------------
+
+IFDEF REV_US
+	.WORD TitleScreen_US_0
+	.WORD TitleScreen_US_1
+ENDIF
 	.WORD TitleScreen_0
 	.WORD TitleScreen_1
 	.WORD TitleScreen_2
@@ -7420,6 +7477,43 @@ TitleScreenHandler:
 ; End of function TitleScreenHandler
 
 ; =============== S U B	R O U T	I N E =======================================
+IFDEF REV_US
+TitleScreen_US_0:
+	JSR ClearAllSprites
+	JSR ClearNametable
+	LDA #$1C
+	JSR WriteStringToPPU
+	LDA #$1D
+	JSR WriteStringToPPU
+	LDA #$1E
+	JSR WriteStringToPPU
+	LDA #$1F
+	JSR WriteStringToPPU
+	LDA #$84
+	STA TempSpriteX
+	LDA #$63
+	STA TempSpriteY
+	LDA #$87
+	JSR WriteBCDDigitsSprites
+	LDA #$74
+	STA TempSpriteX
+	LDA #$19
+	JSR WriteBCDDigitsSprites
+	INC TitleScreenState
+	LDA #0
+	STA CopyrightScreenTimer
+	JMP TitleScreen_US_0_Jump
+
+TitleScreen_US_1:
+	LDA Joypad1_Immediate
+	AND #JP_Start
+	BNE +
+	DEC CopyrightScreenTimer
+	BNE ++
++	LDA #2
+	STA TitleScreenState		; (-> 0 JP)
+++	RTS
+ENDIF
 
 TitleScreen_0:
 	JSR DrawTitleScreen
@@ -7429,14 +7523,33 @@ TitleScreen_0:
 	JSR WriteStringToPPU		; (c) tecmo
 	LDA #Strings_HighGDV
 	JSR WriteStringToPPU		; high gdv
+IFDEF REV_US
+	LDA #1B						; @TODO string fix
+	JSR WriteStringToPPU		; high gdv
+ENDIF
 	JSR DrawScore			; draw score sprites?
 	LDA #$CC
-	STA a:TempSpriteX
+	STAc TempSpriteX
 	LDA #$1C
-	STA a:TempSpriteY
+	STAc TempSpriteY
 	LDA HighGDV
 	JSR WriteBCDDigitsSprites
-	INC a:TitleScreenState		; 00 ->	01
+IFDEF REV_US
+	LDA #$93
+	STA TempSpriteY
+	LDA #$CC
+	STA TempSpriteX
+	LDA #$87
+	JSR WriteBCDDigitsSprites
+	LDA #$BC
+	STA TempSpriteX
+	LDA #$19
+	JSR WriteBCDDigitsSprites
+	LDA #0
+	STA TitleScreenTimer
+	STA TitleScreenTimer+1
+ENDIF
+	INCc TitleScreenState		; 00 ->	01
 	RTS
 ; End of function TitleScreen_0
 
@@ -7444,20 +7557,21 @@ TitleScreen_0:
 
 DrawTitleScreen:
 	JSR ClearAllSprites
-	LDA #BasePointer_AdjacentRoomsTable
-	STA a:PPUUpdateFlag1
+	LDA #BasePointer_AdjacentRoomsTable ; (1)
+	STAc PPUUpdateFlag1
 	JSR LoadPointerTo050		; 1 (adjacent rooms table)
-	LDA a:word_50
+	LDAc word_50
 	STA a:off_3D
-	LDA a:word_50+1
+	LDAc word_50+1
 	STA a:off_3D+1
 	LDA #0
 	STA CurrentRoomID
 	JSR LoadRoomStuff
 	JSR DrawFullScreen
-	LDA a:PPUMaskMirror
+TitleScreen_US_0_Jump:
+	LDAc PPUMaskMirror
 	ORA #6
-	STA a:PPUMaskMirror
+	STAc PPUMaskMirror
 	RTS
 ; End of function DrawTitleScreen
 
@@ -7470,7 +7584,7 @@ TitleScreen_1:
 	LDA #$28
 	STA PlayerXPosHi
 	JSR DrawPlayer
-	INC a:TitleScreenState		; 01 ->	02
+	INCc TitleScreenState		; 01 ->	02
 	RTS
 ; End of function TitleScreen_1
 
@@ -7482,7 +7596,16 @@ TitleScreen_2:
 	BEQ locret_ADBF
 	AND a:Joypad1_ImmediateCopy
 	BEQ loc_ADC0
-
+IFDEF REV_US
+	DEC TitleScreenTimer
+	BNE locret_ADBF
+	INC TitleScreenTimer+1
+	LDA TitleScreenTimer+1
+	CMP #2
+	BNE locret_ADBF
+	LDA #0
+	STA TitleScreenState
+ENDIF
 locret_ADBF:
 	RTS
 ; ---------------------------------------------------------------------------
@@ -7511,9 +7634,9 @@ TitleScreen_3:
 	JSR ClearNametable
 	JSR ClearAllSprites
 	LDA #0
-	STA a:TitleScreenState		; 03 ->	00
-	STA a:GameState
-	INC a:InGameFlag
+	STAc TitleScreenState		; 03 ->	00
+	STAc GameState
+	INCc InGameFlag
 
 locret_ADF5:
 	RTS
@@ -7522,9 +7645,9 @@ locret_ADF5:
 ; =============== S U B	R O U T	I N E =======================================
 
 GameState_1_RoundIntro:
-	LDA a:GameState1Flag
+	LDA GameState1Flag
 	BNE loc_AE07
-	INC a:GameState1Flag
+	INC GameState1Flag
 	JSR ClearAllSprites
 	JSR ClearNametable
 	JSR DrawRoundIntroSprites
@@ -7532,10 +7655,10 @@ GameState_1_RoundIntro:
 loc_AE07:
 	DEC a:GameState1WaitTimer
 	BNE locret_AE17
-	INC a:GameState			; 1 -> 2
+	INCc GameState			; 1 -> 2
 	JSR ClearAllSprites
 	LDA #0
-	STA a:GameState1Flag
+	STAc GameState1Flag
 
 locret_AE17:
 	RTS
@@ -7672,9 +7795,9 @@ loc_AED1:
 	BEQ locret_AEE8
 	AND a:Joypad1_ImmediateCopy
 	BNE locret_AEE8
-	STA a:TitleScreenState		; = 0
+	STAc TitleScreenState		; = 0
 	LDA #$A
-	STA a:GameState
+	STAc GameState
 
 locret_AEE8:
 	RTS
@@ -8024,9 +8147,9 @@ EndingStringTable:
 	EndingText Strings_Ending4A,   4 ;	; 3
 EndingPyramidDestroyDepth:
 	.BYTE 12
-	.BYTE  30				; 1
-	.BYTE  56				; 2
-	.BYTE  90				; 3
+	.BYTE 30				; 1
+	.BYTE 56				; 2
+	.BYTE 90				; 3
 
 ; =============== S U B	R O U T	I N E =======================================
 
@@ -8038,7 +8161,7 @@ HandleSound:
 
 loc_B105:
 	JSR HandleSoundQueue
-	INC a:byte_0			; Inc index
+	INCc byte_0			; Inc index
 	DEC SoundsQueued		; Dec sounds queued
 	BNE loc_B105			; Loop until all done
 
