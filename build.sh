@@ -18,7 +18,7 @@ build() {
 
 
 build bin/mbj-jp.nes
-if compareHash $REVJP 'bin/mbj.nes' -eq 0 ; then
+if compareHash $REVJP 'bin/mbj-jp.nes' -eq 0 ; then
 	echo 'Matched JP ROM.'
 fi
 build -dREV_A bin/mbj-jp-rev-a.nes
