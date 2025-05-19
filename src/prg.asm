@@ -119,30 +119,33 @@ NMI:
 
 HandlePPUUpdates:
 	LDAc PPUUpdateFlag1
-	BEQ loc_80D5
+IFDEF REV_US
+	BEQ loc_80E0
 	LDAc UpdatePaletteFlag
-IFDEF REV_US
 	ORA a:PPUUpdateFlag2
-ENDIF
-	BEQ loc_80D5
-IFDEF REV_US
+	BEQ loc_80E0
 	LDA UpdatePaletteFlag
+	BEQ loc_80D5
+ELSE
+	BEQ loc_80D5
+	LDA a:UpdatePaletteFlag
 	BEQ loc_80D5
 ENDIF
 
 	JSR CopyPaletteToPPU
-IFNDEF REV_US
+
+IFDEF REV_US
+loc_80D5:
+	LDA a:PPUUpdateFlag2
+	BEQ locret_US_80EX
+	JSR sub_9729
+	JMP loc_815B
+ELSE
 	RTS
 
 loc_80D5:
 	LDA a:PPUUpdateFlag2
 	BEQ loc_80E0
-	JSR sub_9729
-	JMP loc_815B
-ELSE
-loc_80D5:
-	LDA a:PPUUpdateFlag2
-	BEQ locret_US_80EX
 	JSR sub_9729
 	JMP loc_815B
 ENDIF
@@ -720,7 +723,11 @@ loc_84A5:
 	STA CurrentRoomID		; -> torture room
 	LDA #2
 	STAc GameState			; 7 / ?	-> 2
+IFDEF REV_US
+	LDA #$50
+ELSE
 	LDA #$49
+ENDIF
 	STA GreedyJumpsRemaining
 	RTS
 ; ---------------------------------------------------------------------------

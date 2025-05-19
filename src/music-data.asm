@@ -2044,10 +2044,17 @@ SoundTrack_1F_2:
 	.BYTE $A4
 	SndJmpF0 unk_FD45 ;
 SoundData_20_BombBonus:
-	SoundData 0, SoundTrack_20_0 ; ;	DATA XREF: ROM:SoundPointerso
-	SoundData 1, SoundTrack_20_1 ;
-	SoundData 2, SoundTrack_20_2 ;
-	SoundData 3, SoundTrack_20_3 ;
+IFDEF REV_US
+	SoundData 4, SoundTrack_20_0
+	SoundData 5, SoundTrack_20_1
+	SoundData 6, SoundTrack_20_2
+	SoundData 7, SoundTrack_20_3
+ELSE
+	SoundData 0, SoundTrack_20_0
+	SoundData 1, SoundTrack_20_1
+	SoundData 2, SoundTrack_20_2
+	SoundData 3, SoundTrack_20_3
+ENDIF
 	.BYTE $FF
 SoundTrack_FD5F:
 	.BYTE $81
