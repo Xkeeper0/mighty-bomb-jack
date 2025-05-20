@@ -68,7 +68,7 @@ loc_8041:
 	STA SND_CHN
 	JSR RestoreDefaultPalettes
 	LDA #0
-	STA $1EFE		; POI: ??? $1EFE ($06FE)
+	STA $1EFE		; POI: ??? $1EFE ($06FE, Object3Struct+4. ?????)
 	LDA #$90
 	JSR SetPPUCtrl
 
@@ -8472,15 +8472,11 @@ RunEnemyLogic:
 ; End of function RunEnemyLogic
 
 ; =============== S U B	R O U T	I N E =======================================
-
 LoadObjectPointerAPlus1:
 	CLC
 	ADC #1
-; End of function LoadObjectPointerAPlus1
 
-; =============== S U B	R O U T	I N E =======================================
-
-LoadObjectPointerA:
+	LoadObjectPointerA:
 	ASL A
 	TAX
 	LDA ObjectPointers,X
@@ -8491,23 +8487,21 @@ LoadObjectPointerA:
 ; End of function LoadObjectPointerA
 
 ; =============== S U B	R O U T	I N E =======================================
-
 ; removes from ptr $07A
-
 RemoveEnemy:
 	LDY #EnemyStruct_0_Status
 	LDA (EnemyStructPointer),Y
 	LSR A
-	BCC locret_B763			; if bit 1 not set, rts
+	BCC +ret			; if bit 1 not set, rts
 	TYA					; A=0
 	STA (EnemyStructPointer),Y
 	LDY #EnemyStruct_13_Type	; 0-7=enemy
 	LDA (EnemyStructPointer),Y
 	CMP #8
-	BCS locret_B763
+	BCS +ret
 	DEC AliveEnemyCount		; dec
 
-locret_B763:
++ret
 	RTS
 ; End of function RemoveEnemy
 
@@ -8541,21 +8535,21 @@ MaybeRemoveIfOffscreen:
 
 MaybeConsiderOffscreen:
 	LDA (EnemyStructPointer),Y
-	BEQ locret_B79A
+	BEQ +ret
 	LDY #EnemyStruct_13_Type	; 0-7=enemy
 	LDA (EnemyStructPointer),Y
 	CMP #8
-	BNE loc_B795
+	BNE +RemoveDoubleRet
 	LDA #0
 	STA MaybeTempCollectableFlag	; cleared
 	STA MaybeTempCollectableFlag2	; cleared
 
-loc_B795:
++RemoveDoubleRet:
 	JSR RemoveEnemy			; removes from ptr $07A
 	PLA
 	PLA
 
-locret_B79A:
++ret:
 	RTS
 ; End of function MaybeConsiderOffscreen
 
@@ -9015,12 +9009,8 @@ locret_BA17:
 
 JT_98A4_8_PowerCoin:
 	JSR RemoveEnemy			; removes from ptr $07A
-; End of function JT_98A4_8_PowerCoin
-
 ; fallthrough to turn enemies into coins
-
 ; =============== S U B	R O U T	I N E =======================================
-
 TurnEnemiesIntoCoins:
 	LDA #$40
 	STA a:EnemyCoinTimer
@@ -9049,7 +9039,9 @@ loc_BA3B:
 
 ; ---------------------------------------------------------------------------
 GoldCoinSpritePalette:
-	.BYTE    0,   8, $26, $30	 ; =============== S U B	R O U T	I N E =======================================
+	.BYTE    0,   8, $26, $30
+
+; =============== S U B	R O U T	I N E =======================================
 
 sub_BA48:
 	LDY #EnemyStruct_2_XVelLo
