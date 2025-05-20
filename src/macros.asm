@@ -58,6 +58,10 @@ MACRO SndJmpF3 target
 	.dw target
 ENDM SndJmp
 
+MACRO Attrib t1, t2, t3, t4
+	.db (t1 << 6) | (t2 << 4) | (t3 << 2) | (t4)
+ENDM
+
 
 ; Compatibility :(
 .include "src/compatibility.asm"
