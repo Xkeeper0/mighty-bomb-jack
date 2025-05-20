@@ -73,14 +73,21 @@ loc_8041:
 	JSR SetPPUCtrl
 
 LoopForever:
+	; "CPU meter" (tints screen after NMI finishes)
+	; LDA PPUMaskMirror
+	; ORA #%00100000	; red emphasis bit
+	; STA PPUMASK
 	JMP LoopForever
 ; End of function RESET
 
 ; ---------------------------------------------------------------------------
 CopyProtectBank:
-	.BYTE	0,$11		 ; =============== S U B	R O U T	I N E =======================================
+	.BYTE	0,$11
 
-	; public NMI
+; ===========================================================================
+; Interrupt handler(s) ...
+; All game logic is handled during NMI; IRQ isn't used in this game.
+IRQ:
 NMI:
 	STAc NMITemp_A			; save A
 	LDAc PPUCtrlMirror		; Disable NMI
@@ -954,22 +961,23 @@ loc_8650:
 ; ---------------------------------------------------------------------------
 
 RoundClear_3:
+	; Are we done counting down?
 	LDA RoundClearCountdownTimer
-	BEQ loc_8662
+	BEQ +
+
+	; If not, keep doing it and return
 	DEC RoundClearCountdownTimer
 	RTS
-; ---------------------------------------------------------------------------
 
-loc_8662:
-	LDA #2
-	STAc GameState			; -> 2
++	LDA #2
+	STAc GameState					; -> 2
 	DECc FireBombsCollected
-	BNE loc_8687
-	LDX LastBombRoomCleared		; used in gdv and difficulty sel
+	BNE +
+	LDX LastBombRoomCleared			; used in gdv and difficulty sel
 	CPX #$9F
-	BEQ loc_8687
+	BEQ +
 	INX
-	STX CurrentRoomID		; end-of-round bomb rooms checks?
+	STX CurrentRoomID				; end-of-round bomb rooms checks?
 	TXA
 	AND #$F
 	ASL A
@@ -979,18 +987,17 @@ loc_8662:
 	LDA #0
 	STA a:TimerStatusMaybe
 
-loc_8687:
-	JSR ClearAllSprites
++	JSR ClearAllSprites
 	LDA a:TimerStatusMaybe
 	AND #~$40
-	STA a:TimerStatusMaybe		; unset	$40
+	STA a:TimerStatusMaybe			; unset	$40
 	LDA #0
 	STA a:Collected1UPThisRoundFlag	; reset
-	STA ScoreMultiplier		; reset
+	STA ScoreMultiplier				; reset
 	STA DoorCheckFlag_1E_DeathCount	; reset
-	STA DoorCheckFlag_1E_Unk	; reset
+	STA DoorCheckFlag_1E_Unk		; reset
 IFDEF REV_US
-	JSR QueueSound
+	JSR QueueSound					; sound 0
 ENDIF
 	RTS
 ; End of function GameState_8_RoundClear

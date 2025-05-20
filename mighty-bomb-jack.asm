@@ -52,16 +52,33 @@ ENDIF
 .ende
 
 
-; -----------------------------------------
-; Program code
 .base $8000
+
+; -----------------------------------------
+; Mighty Bomb Jack nicely splits itself into two sections:
+; Code
 .include "src/prg.asm"
+
+; -----------------------------------------
+; Data
 .include "src/data.asm"
 .include "src/music-data.asm"
-.include "src/vectors.asm"
 
-; Pad empty space
-; .pad $FFFF, $FF
+; -----------------------------------------
+; Then whatever you wanna stick in before the end
+.include "src/end-of-rom-injection.asm"
+
+
+; -----------------------------------------
+; Pad end of ROM; the value used depends on region
+.pad $FFFA, END_OF_ROM_PADDING
+
+; -----------------------------------------
+; CPU vectors
+.dw NMI
+.dw RESET
+.dw IRQ
+
 
 ; -----------------------------------------
 ; Include CHR-ROM
