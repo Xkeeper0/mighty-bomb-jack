@@ -89,19 +89,19 @@ CopyProtectBank:
 ; All game logic is handled during NMI; IRQ isn't used in this game.
 IRQ:
 NMI:
-	STAc NMITemp_A			; save A
-	LDAc PPUCtrlMirror		; Disable NMI
+	STAc NMITemp_A				; save A
+	LDAc PPUCtrlMirror			; Disable NMI
 	AND #$7F
 	JSR SetPPUCtrl
 	LDAc PPUMaskMirror
 	ORA #$18
 	JSR SetPPUMask
-	STYc NMITemp_Y			; save Y
-	STXc NMITemp_X			; save X
-	LDA #0				; _ Sprite DMA setup...
-	STA OAMADDR			;  |
-	LDA #2				;  |
-	STA OAM_DMA			; _|
+	STYc NMITemp_Y				; save Y
+	STXc NMITemp_X				; save X
+	LDA #0						; _ Sprite DMA setup...
+	STA OAMADDR					;  |
+	LDA #2						;  |
+	STA OAM_DMA					; _|
 	LDA #0
 	JSR SetPPUScroll
 	LDA #1
@@ -112,13 +112,13 @@ NMI:
 	JSR HandleSound
 	LDA Joypad1_Immediate
 	STA a:Joypad1_ImmediateCopy
-	LDXc NMITemp_X			; load X
-	LDYc NMITemp_Y			; load Y
+	LDXc NMITemp_X				; load X
+	LDYc NMITemp_Y				; load Y
 	LDA PPUSTATUS
-	LDAc PPUCtrlMirror		; Re-enable NMI
+	LDAc PPUCtrlMirror			; Re-enable NMI
 	ORA #$80
 	JSR SetPPUCtrl
-	LDAc NMITemp_A			; load A
+	LDAc NMITemp_A				; load A
 	RTI
 ; End of function NMI
 
