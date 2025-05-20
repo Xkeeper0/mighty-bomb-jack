@@ -807,9 +807,7 @@ RoundClear_0:
 	LDA a:StageTimer
 	STA a:StageTimerCopy
 	JSR CopyNext5BytesToTempSprite
-; ---------------------------------------------------------------------------
 	SpriteData 0, $10,	$B0, $78, 0 ;
-; ---------------------------------------------------------------------------
 	LDX #2				; round	"X" sprite drawing
 	JSR InitXSprites		; sets up (X) sprites with #00 idx/attrib
 	LDA #$84
@@ -1063,9 +1061,7 @@ loc_8704:
 					;  1000k+ : 5
 	JSR AddAToGDV			; score	bonus (0-5)
 	JSR CopyNext5BytesToTempSprite
-; ---------------------------------------------------------------------------
 	SpriteData 0, $10,	$A4, $84, 0 ;
-; ---------------------------------------------------------------------------
 	LDA PlayerGDV
 	CMP HighGDV
 	BCC loc_871F
@@ -1796,9 +1792,7 @@ loc_8B70:
 
 DrawScore:
 	JSR CopyNext5BytesToTempSprite
-; ---------------------------------------------------------------------------
 	SpriteData 0, $10,	$58, $10, $38 ;
-; ---------------------------------------------------------------------------
 	LDX #3
 	STXc byte_0
 	LDA #0
@@ -1868,9 +1862,7 @@ loc_8BC0:
 
 DrawTimerOrTortureJumps:
 	JSR CopyNext5BytesToTempSprite
-; ---------------------------------------------------------------------------
 	SpriteData $E, $10, $3C, $1C, 9 ;
-; ---------------------------------------------------------------------------
 	LDA TortureRoomSceneFlag	; If not in torture room...
 	BEQ loc_8BF9			;   skip ahead
 	LDA #$F				; Otherwise, sprite tile = blank
@@ -1902,9 +1894,7 @@ loc_8C1A:
 
 DrawMightyCoinCountOrMultiplier:
 	JSR CopyNext5BytesToTempSprite
-; ---------------------------------------------------------------------------
 	SpriteData $B, $10, $BC, $1C, $C ;
-; ---------------------------------------------------------------------------
 	LDA a:RoomStatusFlags
 	AND #RF_BombRoom		; Check	for royal palace/bomb room
 	BEQ loc_8C30
@@ -2673,8 +2663,8 @@ HandleDrawHalfRow:
 	ADC word_50+1
 	STA off_4+1
 	LDY byte_8
-	LDA (off_4),Y
-	CMP #$60
+	LDA (off_4),Y		; If HalfScreenLayout # >= $60, subtract $B
+	CMP #$60			; (see note about HalfScreenLayouts) 
 	BCC loc_906A
 	SBC #$B
 
@@ -7678,23 +7668,18 @@ locret_AE17:
 
 DrawRoundIntroSprites:
 	JSR CopyNext5BytesToTempSprite
-; ---------------------------------------------------------------------------
 	SpriteData  $C, $10, $84, $60, $24 ;; "x"
-; ---------------------------------------------------------------------------
 	JSR WriteSprite
 	JSR CopyNext5BytesToTempSprite
-; ---------------------------------------------------------------------------
 	SpriteData   0,   1, $70, $60, $20 ;; Bomb Jack
-; ---------------------------------------------------------------------------
 	JSR WriteSprite
 	LDA #$60
 	STA a:GameState1WaitTimer
 	JSR CopyNext5BytesToTempSprite
-; ---------------------------------------------------------------------------
 	SpriteData   0, $10, $94, $60, $25 ;; Lives counter
-; ---------------------------------------------------------------------------
 	LDA PlayerLives
-	JSR WriteBCDDigitsSprites	; POI: draws this as if	it is BCD.
+	JSR WriteBCDDigitsSprites
+					; POI: draws this as if	it is BCD.
 					; nothing else treats the life count
 					; like BCD, so when you	(somehow) get
 					; 15 lives, it says nothing, then 10.
