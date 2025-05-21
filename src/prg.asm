@@ -7688,7 +7688,6 @@ DrawRoundIntroSprites:
 	JSR WriteSprite
 	LDA #$60
 	STA a:GameState1WaitTimer
-RoundSelectDisplayHack:
 	JSR CopyNext5BytesToTempSprite
 	SpriteData   0, $10, $94, $60, $25 ;; Lives counter
 	LDA PlayerLives

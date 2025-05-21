@@ -447,7 +447,12 @@ ENDIF
 
 String_PushStartButton:
 	.WORD $1C8
+IFNDEF ROUND_SELECT
 	.BYTE _P,_U,_S,_H,__,_S,_T,_A,_R,_T,__,_B,_U,_T,_T,_O,_N
+ELSE
+	;                                                     xx
+	.BYTE _S,_T,_A,_R,_T,__,_O,_R,__,_A,__,_B,_U,_T,_T,_O,_N
+ENDIF
 	.BYTE $FF
 String_GameOver:
 	.WORD $18C

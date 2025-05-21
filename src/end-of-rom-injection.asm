@@ -7,7 +7,7 @@ IFDEF ROUND_SELECT
 BypassStart:
 
 	LDA Joypad1_Immediate
-	BEQ +rts
+	BEQ +after
 	EOR Joypad1_ImmediateCopy
 	CMP #JP_Start
 	BNE +
@@ -16,23 +16,26 @@ BypassStart:
 +	CMP #JP_Right
 	BNE +
 	INC RoundSelectRound
-	BPL +rts
+	LDA #Sound_BombCollectedLit
+	BPL +after
 
 +	CMP #JP_Left
 	BNE +
 	DEC RoundSelectRound
-	BPL +rts
+	LDA #Sound_BombCollectedUnlit
+	BPL +after
 
 +	CMP #JP_A
 	BEQ +start
-
-+rts
-
-	JSR RoundSelectDisplayHack	; halfway into DrawRoundIntroSprites
+	LDA #0
++after
+	JSR QueueSound
+	JSR CopyNext5BytesToTempSprite
+	SpriteData   0, $10, $DB, $73, $25		; after "push start" text
 	LDA RoundSelectRound
 	AND #$0F
 	STA RoundSelectRound
-	ADC #1						; C is set + 1 = start at 2
+	ADC #2						; C is clear + 1 = start at 2
 	CMP #10						; handle BCD-ificatino
 	BCC +
 	ADC #5
@@ -55,11 +58,11 @@ BypassStart:
 	LDA RoundJumpDoors, X
 	STA EntryDoorType
 
-	; LDA #1
-	; STA GameState
-	; STA InGameFlag
-	;INC GameState
-	INC InGameFlag
+	LDA #1
+	STA GameState
+	STA InGameFlag
+	; INC GameState
+	; INC InGameFlag
 
 	JMP GameState_1_RoundIntro
 
