@@ -359,6 +359,7 @@ PlayerY_Lo:
 	.dsb 1                      ; $00ed
 byte_EE:
 	.dsb 1	                     ; $00ee
+RoundSelectRound:
 	.dsb 1                      ; $00ef
 byte_F0:
 	.dsb 1	                     ; $00f0

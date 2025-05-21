@@ -8,6 +8,7 @@ You can build the game by running `build.bat` or `build.sh`, or running the foll
 * Japanese release: `tools\asm6f_64.exe mighty-bomb-jack.asm bin\mbj-jp.nes`
 * Japanese revision A: `tools\asm6f_64.exe -dREV_A mighty-bomb-jack.asm bin\mbj-jp-rev-a.nes`
 * USA: `tools\asm6f_64.exe -dREV_US mighty-bomb-jack.asm bin\mbj-us.nes`
+* Round select menu: `-dROUND_SELECT`
 
 More details to come.
 

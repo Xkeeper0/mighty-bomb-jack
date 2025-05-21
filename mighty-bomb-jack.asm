@@ -29,6 +29,21 @@ ENDIF
 
 
 ; -----------------------------------------
+; Enable "round select" on title screen.
+; A: start at selected round
+; start: normal game start
+; left/right: change round
+;ROUND_SELECT equ 1
+
+IFDEF ROUND_SELECT
+	; If the menu is enabled, always use better opcodes
+	IFNDEF USE_MORE_ZP
+		USE_MORE_ZP equ 1
+	ENDIF
+ENDIF
+
+
+; -----------------------------------------
 ; Add iNES header
 
 	INESPRG 2				; 2 x 16KB PRG pages

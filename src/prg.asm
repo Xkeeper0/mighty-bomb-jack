@@ -805,7 +805,7 @@ RoundClear_0:
 	LDA a:TimerStatusMaybe
 	ORA #$80
 	STA a:TimerStatusMaybe
-	JSR DrawScore			; draw score sprites?
+	JSR DrawScore				; draw score sprites?
 	JSR ClearNametable
 	LDA #Strings_Round_Clear
 	JSR WriteStringToPPU		; round	X clear
@@ -815,18 +815,18 @@ RoundClear_0:
 	STA a:StageTimerCopy
 	JSR CopyNext5BytesToTempSprite
 	SpriteData 0, $10,	$B0, $78, 0 ;
-	LDX #2				; round	"X" sprite drawing
-	JSR InitXSprites		; sets up (X) sprites with #00 idx/attrib
+	LDX #2						; round	"X" sprite drawing
+	JSR InitXSprites			; sets up (X) sprites with #00 idx/attrib
 	LDA #$84
 	STAc TempSpriteX
 	LDA #$44
 	STAc TempSpriteY
 	LDA LastBombRoomCleared		; Get the last bomb room clear
-	AND #$F				; 9x ->	0x
+	AND #$F						; 9x ->	0x
 	CLC
-	ADC #1				; Add 1
-	CMP #$A				; If >=	#$A,
-	BCC loc_8571			; add 5	for BCD-ness
+	ADC #1						; Add 1
+	CMP #$A						; If >=	#$A,
+	BCC loc_8571				; add 5	for BCD-ness
 	ADC #5
 
 loc_8571:
@@ -984,6 +984,7 @@ RoundClear_3:
 	TAX
 	LDA MaybeEntryTypeTable,X
 	STA EntryDoorType
+RoundSelectInject:
 	LDA #0
 	STA a:TimerStatusMaybe
 
@@ -7481,7 +7482,12 @@ IFDEF REV_US
 ENDIF
 	.WORD TitleScreen_0
 	.WORD TitleScreen_1
+
+IFDEF ROUND_SELECT
+	.WORD BypassStart
+ELSE
 	.WORD TitleScreen_2
+ENDIF
 	.WORD TitleScreen_3
 ; End of function TitleScreenHandler
 
@@ -7656,21 +7662,20 @@ locret_ADF5:
 
 GameState_1_RoundIntro:
 	LDA GameState1Flag
-	BNE loc_AE07
+	BNE +
 	INC GameState1Flag
 	JSR ClearAllSprites
 	JSR ClearNametable
 	JSR DrawRoundIntroSprites
 
-loc_AE07:
-	DEC a:GameState1WaitTimer
-	BNE locret_AE17
++	DEC a:GameState1WaitTimer
+	BNE +ret
 	INCc GameState			; 1 -> 2
 	JSR ClearAllSprites
 	LDA #0
 	STAc GameState1Flag
 
-locret_AE17:
++ret:
 	RTS
 ; ---------------------------------------------------------------------------
 
@@ -7683,6 +7688,7 @@ DrawRoundIntroSprites:
 	JSR WriteSprite
 	LDA #$60
 	STA a:GameState1WaitTimer
+RoundSelectDisplayHack:
 	JSR CopyNext5BytesToTempSprite
 	SpriteData   0, $10, $94, $60, $25 ;; Lives counter
 	LDA PlayerLives

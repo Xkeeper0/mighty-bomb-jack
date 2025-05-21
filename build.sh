@@ -9,7 +9,7 @@ compareHash() {
 }
 
 build() {
-	tools/asm6f mighty-bomb-jack.asm "$@"
+	tools/asm6f mighty-bomb-jack.asm -n "$@"
 	if [ $? -ne 0 ] ; then
 		echo 'Build failed!'
 		exit 1
@@ -17,15 +17,15 @@ build() {
 }
 
 
-build bin/mbj-jp.nes
+build bin/mbj-jp.nes "$@"
 if compareHash $REVJP 'bin/mbj-jp.nes' -eq 0 ; then
 	echo 'Matched JP ROM.'
 fi
-build -dREV_A bin/mbj-jp-rev-a.nes
+build -dREV_A bin/mbj-jp-rev-a.nes "$@"
 if compareHash $REVJPA 'bin/mbj-jp-rev-a.nes' -eq 0 ; then
 	echo 'Matched JP Rev A ROM.'
 fi
-build -dREV_US bin/mbj-us.nes
+build -dREV_US bin/mbj-us.nes "$@"
 if compareHash $REVUS 'bin/mbj-us.nes' -eq 0 ; then
 	echo 'Matched US ROM.'
 fi
