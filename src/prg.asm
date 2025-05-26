@@ -8978,12 +8978,10 @@ loc_B9C0:
 SpawnPowerCoin:
 	LDA #2
 	BIT MaybeTempCollectableFlag	; check	#2 here
-	BEQ loc_B9EE
+	BEQ +
 	RTS
-; ---------------------------------------------------------------------------
 
-loc_B9EE:
-	ORA MaybeTempCollectableFlag	; or #2	here
++	ORA MaybeTempCollectableFlag	; or #2	here
 	STA MaybeTempCollectableFlag	; and store
 	JSR sub_BA00
 	LDA #EnemyType_8_PowerCoin
@@ -8997,23 +8995,22 @@ loc_B9EE:
 sub_BA00:
 	LDA #0
 
-loc_BA02:
-	PHA
+-	PHA
 	JSR LoadObjectPointerAPlus1
 	PLA
 	TAX
 	LDY #0
 	LDA (EnemyStructPointer),Y
 	LSR A
-	BCC locret_BA17
+	BCC +ret
 	INX
 	TXA
 	CMP #8
-	BNE loc_BA02
+	BNE -
 	PLA
 	PLA
 
-locret_BA17:
++ret:
 	RTS
 ; End of function sub_BA00
 
@@ -9021,8 +9018,7 @@ locret_BA17:
 
 JT_98A4_8_PowerCoin:
 	JSR RemoveEnemy			; removes from ptr $07A
-; fallthrough to turn enemies into coins
-; =============== S U B	R O U T	I N E =======================================
+							; fallthrough to turn enemies into coins
 TurnEnemiesIntoCoins:
 	LDA #$40
 	STA a:EnemyCoinTimer
@@ -9033,18 +9029,16 @@ TurnEnemiesIntoCoins:
 	LDX #0
 	STX a:byte_54
 
-loc_BA2F:
-	TXA
+-	TXA
 	AND #3
-	BEQ loc_BA3B
+	BEQ +
 	TAY
 	LDA GoldCoinSpritePalette,Y
 	STA PaletteBuffer+$18,X
 
-loc_BA3B:
-	INX
++	INX
 	CPX #4
-	BNE loc_BA2F
+	BNE -
 	INC a:UpdatePaletteFlag
 	RTS
 ; End of function TurnEnemiesIntoCoins
